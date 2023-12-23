@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+prompts/test/
+logits/
+performance/
+ipynb4prepare/
+config/config.py
+
 # C extensions
 *.so
 
