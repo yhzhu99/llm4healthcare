@@ -1,0 +1,497 @@
+Here is an example:
+Input patient information:
+This Patient had 6 visits with the following details:
+Visit 1:
+- PatientID: 117
+- RecordTime: 2020-2-5
+- AdmissionTime: 2020-2-4
+- DischargeTime: 2020-2-17
+- LOS: 12
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: 123.0
+- Serum chloride: 105.1
+- Prothrombin time: 13.7
+- procalcitonin: 0.49
+- eosinophils(%): 0.2
+- Interleukin 2 receptor: nan
+- Alkaline phosphatase: 55.0
+- albumin: 35.2
+- basophil(%): 0.0
+- Interleukin 10: nan
+- Total bilirubin: 10.3
+- Platelet count: 124.0
+- monocytes(%): 13.0
+- antithrombin: 98.0
+- Interleukin 8: nan
+- indirect bilirubin: 5.8
+- Red blood cell distribution width : 12.7
+- neutrophils(%): 68.9
+- total protein: 66.9
+- Quantification of Treponema pallidum antibodies: 0.06
+- Prothrombin activity: 95.0
+- HBsAg: 0.0
+- mean corpuscular volume: 94.3
+- hematocrit: 37.7
+- White blood cell count: 3.52
+- Tumor necrosis factorα: nan
+- mean corpuscular hemoglobin concentration: 326.0
+- fibrinogen: 5.74
+- Interleukin 1β: nan
+- Urea: 7.8
+- lymphocyte count: 0.99
+- PH value: 6.934
+- Red blood cell count: 2.85
+- Eosinophil count: 0.01
+- Corrected calcium: 2.37
+- Serum potassium: 4.96
+- glucose: 4.9
+- neutrophils count: 3.82
+- Direct bilirubin: 4.5
+- Mean platelet volume: 13.2
+- ferritin: 615.9
+- RBC distribution width SD: 43.8
+- Thrombin time: 15.9
+- (%)lymphocyte: 17.9
+- HCV antibody quantification: 0.09
+- D-D dimer: 0.4
+- Total cholesterol: 3.75
+- aspartate aminotransferase: 29.0
+- Uric acid: 346.0
+- HCO3-: 21.0
+- calcium: 2.13
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: 194.0
+- platelet large cell ratio : 50.7
+- Interleukin 6: nan
+- Fibrin degradation products: 4.0
+- monocytes count: 0.72
+- PLT distribution width: 17.4
+- globulin: 31.7
+- γ-glutamyl transpeptidase: 37.0
+- International standard ratio: 1.04
+- basophil count(#): 0.0
+- mean corpuscular hemoglobin : 30.8
+- Activation of partial thromboplastin time: 56.8
+- High sensitivity C-reactive protein: 54.0
+- HIV antibody quantification: 0.1
+- serum sodium: 140.3
+- thrombocytocrit: 0.16
+- ESR: 35.0
+- glutamic-pyruvic transaminase: 30.0
+- eGFR: 48.2
+- creatinine: 143.0
+
+Visit 2:
+- PatientID: 117
+- RecordTime: 2020-2-6
+- AdmissionTime: 2020-2-4
+- DischargeTime: 2020-2-17
+- LOS: 11
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: nan
+- Serum chloride: nan
+- Prothrombin time: nan
+- procalcitonin: nan
+- eosinophils(%): nan
+- Interleukin 2 receptor: 863.0
+- Alkaline phosphatase: nan
+- albumin: nan
+- basophil(%): nan
+- Interleukin 10: 5.0
+- Total bilirubin: nan
+- Platelet count: nan
+- monocytes(%): nan
+- antithrombin: nan
+- Interleukin 8: 9.6
+- indirect bilirubin: nan
+- Red blood cell distribution width : nan
+- neutrophils(%): nan
+- total protein: nan
+- Quantification of Treponema pallidum antibodies: nan
+- Prothrombin activity: nan
+- HBsAg: nan
+- mean corpuscular volume: nan
+- hematocrit: nan
+- White blood cell count: nan
+- Tumor necrosis factorα: 13.1
+- mean corpuscular hemoglobin concentration: nan
+- fibrinogen: nan
+- Interleukin 1β: 5.0
+- Urea: nan
+- lymphocyte count: nan
+- PH value: nan
+- Red blood cell count: nan
+- Eosinophil count: nan
+- Corrected calcium: nan
+- Serum potassium: nan
+- glucose: nan
+- neutrophils count: nan
+- Direct bilirubin: nan
+- Mean platelet volume: nan
+- ferritin: nan
+- RBC distribution width SD: nan
+- Thrombin time: nan
+- (%)lymphocyte: nan
+- HCV antibody quantification: nan
+- D-D dimer: nan
+- Total cholesterol: nan
+- aspartate aminotransferase: nan
+- Uric acid: nan
+- HCO3-: nan
+- calcium: nan
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: nan
+- platelet large cell ratio : nan
+- Interleukin 6: 19.53
+- Fibrin degradation products: nan
+- monocytes count: nan
+- PLT distribution width: nan
+- globulin: nan
+- γ-glutamyl transpeptidase: nan
+- International standard ratio: nan
+- basophil count(#): nan
+- mean corpuscular hemoglobin : nan
+- Activation of partial thromboplastin time: nan
+- High sensitivity C-reactive protein: nan
+- HIV antibody quantification: nan
+- serum sodium: nan
+- thrombocytocrit: nan
+- ESR: nan
+- glutamic-pyruvic transaminase: nan
+- eGFR: nan
+- creatinine: nan
+
+Visit 3:
+- PatientID: 117
+- RecordTime: 2020-2-8
+- AdmissionTime: 2020-2-4
+- DischargeTime: 2020-2-17
+- LOS: 9
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: 133.0
+- Serum chloride: 102.3
+- Prothrombin time: nan
+- procalcitonin: nan
+- eosinophils(%): 0.0
+- Interleukin 2 receptor: nan
+- Alkaline phosphatase: 58.0
+- albumin: 36.3
+- basophil(%): 0.2
+- Interleukin 10: nan
+- Total bilirubin: 10.6
+- Platelet count: 199.0
+- monocytes(%): 11.3
+- antithrombin: nan
+- Interleukin 8: nan
+- indirect bilirubin: 6.7
+- Red blood cell distribution width : 12.1
+- neutrophils(%): 72.9
+- total protein: 72.1
+- Quantification of Treponema pallidum antibodies: nan
+- Prothrombin activity: nan
+- HBsAg: nan
+- mean corpuscular volume: 92.3
+- hematocrit: 39.3
+- White blood cell count: 6.46
+- Tumor necrosis factorα: nan
+- mean corpuscular hemoglobin concentration: 338.0
+- fibrinogen: nan
+- Interleukin 1β: nan
+- Urea: 5.8
+- lymphocyte count: 1.01
+- PH value: nan
+- Red blood cell count: 4.26
+- Eosinophil count: 0.0
+- Corrected calcium: 2.6
+- Serum potassium: 4.62
+- glucose: 4.83
+- neutrophils count: 4.71
+- Direct bilirubin: 3.9
+- Mean platelet volume: 12.0
+- ferritin: nan
+- RBC distribution width SD: 40.7
+- Thrombin time: nan
+- (%)lymphocyte: 15.6
+- HCV antibody quantification: nan
+- D-D dimer: nan
+- Total cholesterol: 4.28
+- aspartate aminotransferase: 41.0
+- Uric acid: 263.0
+- HCO3-: 25.7
+- calcium: 2.39
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: 192.0
+- platelet large cell ratio : 41.0
+- Interleukin 6: nan
+- Fibrin degradation products: nan
+- monocytes count: 0.73
+- PLT distribution width: 15.8
+- globulin: 35.8
+- γ-glutamyl transpeptidase: 47.0
+- International standard ratio: nan
+- basophil count(#): 0.01
+- mean corpuscular hemoglobin : 31.2
+- Activation of partial thromboplastin time: nan
+- High sensitivity C-reactive protein: 29.8
+- HIV antibody quantification: nan
+- serum sodium: 139.9
+- thrombocytocrit: 0.24
+- ESR: nan
+- glutamic-pyruvic transaminase: 74.0
+- eGFR: 64.7
+- creatinine: 112.0
+
+Visit 4:
+- PatientID: 117
+- RecordTime: 2020-2-12
+- AdmissionTime: 2020-2-4
+- DischargeTime: 2020-2-17
+- LOS: 5
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: 139.0
+- Serum chloride: 101.1
+- Prothrombin time: nan
+- procalcitonin: nan
+- eosinophils(%): 0.0
+- Interleukin 2 receptor: nan
+- Alkaline phosphatase: 58.0
+- albumin: 34.6
+- basophil(%): 0.1
+- Interleukin 10: nan
+- Total bilirubin: 6.7
+- Platelet count: 354.0
+- monocytes(%): 7.8
+- antithrombin: nan
+- Interleukin 8: nan
+- indirect bilirubin: 4.3
+- Red blood cell distribution width : 12.3
+- neutrophils(%): 78.9
+- total protein: 76.8
+- Quantification of Treponema pallidum antibodies: nan
+- Prothrombin activity: nan
+- HBsAg: nan
+- mean corpuscular volume: 93.3
+- hematocrit: 40.7
+- White blood cell count: 5.93
+- Tumor necrosis factorα: nan
+- mean corpuscular hemoglobin concentration: 342.0
+- fibrinogen: nan
+- Interleukin 1β: nan
+- Urea: 8.5
+- lymphocyte count: 1.37
+- PH value: 7.0
+- Red blood cell count: 3.08
+- Eosinophil count: 0.0
+- Corrected calcium: 2.79
+- Serum potassium: 4.79
+- glucose: 5.1
+- neutrophils count: 8.17
+- Direct bilirubin: 2.4
+- Mean platelet volume: 10.1
+- ferritin: nan
+- RBC distribution width SD: 41.1
+- Thrombin time: nan
+- (%)lymphocyte: 13.2
+- HCV antibody quantification: nan
+- D-D dimer: nan
+- Total cholesterol: 4.1
+- aspartate aminotransferase: 33.0
+- Uric acid: 287.0
+- HCO3-: 26.6
+- calcium: 2.54
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: 228.0
+- platelet large cell ratio : 25.9
+- Interleukin 6: nan
+- Fibrin degradation products: nan
+- monocytes count: 0.81
+- PLT distribution width: 11.2
+- globulin: 42.2
+- γ-glutamyl transpeptidase: 49.0
+- International standard ratio: nan
+- basophil count(#): 0.01
+- mean corpuscular hemoglobin : 31.9
+- Activation of partial thromboplastin time: nan
+- High sensitivity C-reactive protein: 3.0
+- HIV antibody quantification: nan
+- serum sodium: 139.8
+- thrombocytocrit: 0.36
+- ESR: nan
+- glutamic-pyruvic transaminase: 94.0
+- eGFR: 64.7
+- creatinine: 112.0
+
+Visit 5:
+- PatientID: 117
+- RecordTime: 2020-2-14
+- AdmissionTime: 2020-2-4
+- DischargeTime: 2020-2-17
+- LOS: 3
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: 136.0
+- Serum chloride: 101.1
+- Prothrombin time: nan
+- procalcitonin: nan
+- eosinophils(%): 0.0
+- Interleukin 2 receptor: nan
+- Alkaline phosphatase: 50.0
+- albumin: 35.7
+- basophil(%): 0.2
+- Interleukin 10: nan
+- Total bilirubin: 7.4
+- Platelet count: 367.0
+- monocytes(%): 6.9
+- antithrombin: nan
+- Interleukin 8: nan
+- indirect bilirubin: 4.3
+- Red blood cell distribution width : 12.3
+- neutrophils(%): 80.9
+- total protein: 78.0
+- Quantification of Treponema pallidum antibodies: nan
+- Prothrombin activity: nan
+- HBsAg: nan
+- mean corpuscular volume: 92.8
+- hematocrit: 40.1
+- White blood cell count: 6.19
+- Tumor necrosis factorα: nan
+- mean corpuscular hemoglobin concentration: 339.0
+- fibrinogen: nan
+- Interleukin 1β: nan
+- Urea: 8.0
+- lymphocyte count: 1.4
+- PH value: 7.0
+- Red blood cell count: 2.71
+- Eosinophil count: 0.0
+- Corrected calcium: 2.59
+- Serum potassium: 4.97
+- glucose: 4.67
+- neutrophils count: 9.45
+- Direct bilirubin: 3.1
+- Mean platelet volume: 9.9
+- ferritin: nan
+- RBC distribution width SD: 40.6
+- Thrombin time: nan
+- (%)lymphocyte: 12.0
+- HCV antibody quantification: nan
+- D-D dimer: nan
+- Total cholesterol: 4.08
+- aspartate aminotransferase: 23.0
+- Uric acid: 325.0
+- HCO3-: 28.1
+- calcium: 2.36
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: 179.0
+- platelet large cell ratio : 23.6
+- Interleukin 6: nan
+- Fibrin degradation products: nan
+- monocytes count: 0.81
+- PLT distribution width: 10.6
+- globulin: 42.3
+- γ-glutamyl transpeptidase: 46.0
+- International standard ratio: nan
+- basophil count(#): 0.02
+- mean corpuscular hemoglobin : 31.5
+- Activation of partial thromboplastin time: nan
+- High sensitivity C-reactive protein: 1.4
+- HIV antibody quantification: nan
+- serum sodium: 140.1
+- thrombocytocrit: 0.36
+- ESR: nan
+- glutamic-pyruvic transaminase: 61.0
+- eGFR: 70.8
+- creatinine: 104.0
+
+Visit 6:
+- PatientID: 117
+- RecordTime: 2020-2-17
+- AdmissionTime: 2020-2-4
+- DischargeTime: 2020-2-17
+- LOS: 0
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: nan
+- Serum chloride: nan
+- Prothrombin time: nan
+- procalcitonin: nan
+- eosinophils(%): nan
+- Interleukin 2 receptor: nan
+- Alkaline phosphatase: nan
+- albumin: nan
+- basophil(%): nan
+- Interleukin 10: nan
+- Total bilirubin: nan
+- Platelet count: nan
+- monocytes(%): nan
+- antithrombin: nan
+- Interleukin 8: nan
+- indirect bilirubin: nan
+- Red blood cell distribution width : nan
+- neutrophils(%): nan
+- total protein: nan
+- Quantification of Treponema pallidum antibodies: nan
+- Prothrombin activity: nan
+- HBsAg: nan
+- mean corpuscular volume: nan
+- hematocrit: nan
+- White blood cell count: 0.8
+- Tumor necrosis factorα: nan
+- mean corpuscular hemoglobin concentration: nan
+- fibrinogen: nan
+- Interleukin 1β: nan
+- Urea: nan
+- lymphocyte count: nan
+- PH value: 6.0
+- Red blood cell count: 0.1
+- Eosinophil count: nan
+- Corrected calcium: nan
+- Serum potassium: nan
+- glucose: nan
+- neutrophils count: nan
+- Direct bilirubin: nan
+- Mean platelet volume: nan
+- ferritin: nan
+- RBC distribution width SD: nan
+- Thrombin time: nan
+- (%)lymphocyte: nan
+- HCV antibody quantification: nan
+- D-D dimer: nan
+- Total cholesterol: nan
+- aspartate aminotransferase: nan
+- Uric acid: nan
+- HCO3-: nan
+- calcium: nan
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: nan
+- platelet large cell ratio : nan
+- Interleukin 6: nan
+- Fibrin degradation products: nan
+- monocytes count: nan
+- PLT distribution width: nan
+- globulin: nan
+- γ-glutamyl transpeptidase: nan
+- International standard ratio: nan
+- basophil count(#): nan
+- mean corpuscular hemoglobin : nan
+- Activation of partial thromboplastin time: nan
+- High sensitivity C-reactive protein: nan
+- HIV antibody quantification: nan
+- serum sodium: nan
+- thrombocytocrit: nan
+- ESR: nan
+- glutamic-pyruvic transaminase: nan
+- eGFR: nan
+- creatinine: nan
+
+RESPONSE:
+0.25

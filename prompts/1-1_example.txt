@@ -1,0 +1,86 @@
+Here is one example:
+Input patient information:
+This Patient had a visit with the following details:
+- PatientID: 117
+- RecordTime: 2020-02-05
+- AdmissionTime: 2020-02-04
+- DischargeTime: 2020-02-17
+- LOS: 12
+- Sex: 1
+- Age: 52
+- Hypersensitive cardiac troponinI: nan
+- hemoglobin: 123.0
+- Serum chloride: 105.1
+- Prothrombin time: 13.7
+- procalcitonin: 0.49
+- eosinophils(%): 0.2
+- Interleukin 2 receptor: nan
+- Alkaline phosphatase: 55.0
+- albumin: 35.2
+- basophil(%): 0.0
+- Interleukin 10: nan
+- Total bilirubin: 10.3
+- Platelet count: 124.0
+- monocytes(%): 13.0
+- antithrombin: 98.0
+- Interleukin 8: nan
+- indirect bilirubin: 5.8
+- Red blood cell distribution width : 12.7
+- neutrophils(%): 68.9
+- total protein: 66.9
+- Quantification of Treponema pallidum antibodies: 0.06
+- Prothrombin activity: 95.0
+- HBsAg: 0.0
+- mean corpuscular volume: 94.3
+- hematocrit: 37.7
+- White blood cell count: 3.52
+- Tumor necrosis factor伪: nan
+- mean corpuscular hemoglobin concentration: 326.0
+- fibrinogen: 5.74
+- Interleukin 1-beta (IL-1β): nan
+- Urea: 7.8
+- lymphocyte count: 0.99
+- PH value: 6.934
+- Red blood cell count: 2.85
+- Eosinophil count: 0.01
+- Corrected calcium: 2.37
+- Serum potassium: 4.96
+- glucose: 4.9
+- neutrophils count: 3.82
+- Direct bilirubin: 4.5
+- Mean platelet volume: 13.2
+- ferritin: 615.9
+- RBC distribution width SD: 43.8
+- Thrombin time: 15.9
+- (%)lymphocyte: 17.9
+- HCV antibody quantification: 0.09
+- D-D dimer: 0.4
+- Total cholesterol: 3.75
+- aspartate aminotransferase: 29.0
+- Uric acid: 346.0
+- HCO3-: 21.0
+- calcium: 2.13
+- Amino-terminal brain natriuretic peptide precursor(NT-proBNP): nan
+- Lactate dehydrogenase: 194.0
+- platelet large cell ratio : 50.7
+- Interleukin 6: nan
+- Fibrin degradation products: 4.0
+- monocytes count: 0.72
+- PLT distribution width: 17.4
+- globulin: 31.7
+- Gamma-glutamyl transpeptidase: 37.0
+- International standard ratio: 1.04
+- basophil count(#): 0.0
+- mean corpuscular hemoglobin : 30.8
+- Activation of partial thromboplastin time: 56.8
+- Hypersensitive c-reactive protein: 54.0
+- HIV antibody quantification: 0.1
+- serum sodium: 140.3
+- thrombocytocrit: 0.16
+- ESR: 35.0
+- glutamic-pyruvic transaminase: 30.0
+- eGFR: 48.2
+- creatinine: 143.0
+
+RESPONSE:
+0.25

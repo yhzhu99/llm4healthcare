@@ -1,0 +1,11 @@
+I will provide you with a patient's medical information from multiple visits in the ICU, each visit having a fixed number of features. Missing values will be represented as 'nan'.
+Your task is to assess the patient's overall health condition based on the multiple visits and provide the patient's probability of death upon discharge.
+You should represent the probability of death as a floating-point number between 0 and 1, where a higher number indicates a higher likelihood of death.
+If, based on the provided information, a reasonable probability of death cannot be determined, you should respond only "I don't know" without any additional text.
+
+{unit_range}
+{example}
+Input patient information:
+This Patient had {length} with the following details:
+{detail}
+RESPONSE:
