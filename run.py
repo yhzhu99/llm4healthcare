@@ -13,7 +13,7 @@ from tenacity import (
 from openai import OpenAI
 import pandas as pd
 
-from config.config import OPENAI_API_KEY, params
+from config.config import *
 from prompts.prompt import *
 
 logging.basicConfig(filename=f'logs/{dt.now().strftime("%Y%m%d")}.log', level=logging.INFO, format='%(asctime)s\n%(message)s')
@@ -34,28 +34,71 @@ def query_llm(
     )
     return result.choices[0].message.content, result.usage.prompt_tokens, result.usage.completion_tokens
 
+def format_input(
+    patient: pd.DataFrame,
+    dataset: str,
+    prediction_format: str,
+    visit: int,
+):
+    basic_features = FEATURES[dataset]['Basic']
+    demo_features = FEATURES[dataset]['Demographics']
+    lab_features = FEATURES[dataset]['Laboratory']
+    features = []
+    feature_values = {}
+    if dataset == 'mimic-iv':
+        for feature in basic_features + demo_features:
+            features.append(feature)
+            feature_values[feature] = patient[feature].values[:visit + 1]
+        for feature in lab_features['Categorical']:
+            features.append(feature)
+            columns = patient.columns[patient.columns.str.startswith(feature)]
+            rows = [patient.columns[res] for res in (patient[columns] == 1.0).values]
+            values = [row.item().split('->')[-1] if len(row) > 0 else 'nan' for row in rows]
+            feature_values[feature] = values[:visit + 1]
+        for feature in lab_features['Numerical']:
+            features.append(feature)
+            feature_values[feature] = patient[feature].values[:visit + 1]
+    elif dataset == 'tjh':
+        for feature in basic_features + demo_features + lab_features:
+            features.append(feature)
+            feature_values[feature] = patient[feature].values[:visit + 1]
+    detail = ''
+    if prediction_format == 'N-1_string':
+        for feature in features:
+            detail += f'- {feature}: \"{", ".join(list(map(str, feature_values[feature])))}\"\n'
+    elif prediction_format == 'N-1_list':
+        for feature in features:
+            detail += f'- {feature}: [{", ".join(list(map(str, feature_values[feature])))}]\n'
+    elif prediction_format == 'N-1_batches':
+        for i in range(visit + 1):
+            detail += f'Visit {i + 1}:\n'
+            for feature in features:
+                detail += f'- {feature}: {feature_values[feature][i]}\n'
+            detail += '\n' if i < visit else ''
+    return detail
+
 def run(
     config: Dict,
     dst_root: str='logits',
 ):
     logging.info(f'Running config: {config}\n\n')
     
+    dataset = config['dataset']
+    assert dataset in ['tjh', 'mimic-iv'], f'Unknown dataset: {dataset}'
+    
     prompt_tokens = 0
     completion_tokens = 0
     
     if config['unit'] is True or config['range'] is True:
         unit_range = UNIT_RANGE_PROMPT
-        unit_values = dict(json.load(open(UNIT)))
-        range_values = dict(json.load(open(RANGE)))
+        unit_values = dict(json.load(open(UNIT[dataset])))
+        range_values = dict(json.load(open(RANGE[dataset])))
         for feature in unit_values.keys():
-            if unit_values[feature] == '':
-                unit_range += f'- {feature}.'
-            else:
-                unit_range += f'- {feature}: '
-                if config['unit'] is True:
-                    unit_range = unit_range + unit_values[feature] + ' '
-                if config['range'] is True:
-                    unit_range = unit_range + range_values[feature]
+            unit_range += f'- {feature}: '
+            if config['unit'] is True:
+                unit_range = unit_range + unit_values[feature] + ' '
+            if config['range'] is True:
+                unit_range = unit_range + range_values[feature]
             unit_range += "\n"
     else:
         unit_range = ''
@@ -71,22 +114,23 @@ def run(
         raise Exception(f'Unknown prediction type: {prediction}')
         
     if config['shot'] is True:
-        example = open(EXAMPLE[prediction_format]).read() + '\n'
+        example = open(EXAMPLE[dataset][prediction_format]).read() + '\n'
     else:
         example = ''
         
-    dataset = pd.read_csv('datasets/subdatasets/10samples.csv')
-    grouped_patients = [item[1] for item in dataset.groupby(['PatientID'])]
+    patients = pd.read_csv(DATASETS_PATH[dataset])
+    grouped_patients = [item[1] for item in patients.groupby(['PatientID'])]
     if config['forwardfill'] is True:
-        filled_values = dataset[dataset.columns[8:]].median(skipna=True).to_dict()
+        filled_values = patients[patients.columns[8:]].median(skipna=True).to_dict()
         for patient in grouped_patients:
             patient.fillna(method='ffill', inplace=True)
             patient.fillna(value=filled_values, inplace=True)
     visit_range = range(max([len(patient) for patient in grouped_patients]))
+    visits = max([len(patient) for patient in grouped_patients])
     labels = []
     preds = []
     
-    for visit in range(4, 5):
+    for visit in range(visits - 1, visits):
         label = []
         pred = []
         length = f'{visit + 1} visit'
@@ -94,30 +138,12 @@ def run(
         for patient in grouped_patients:
             if len(patient) <= visit:
                 continue 
-            detail = ''
-            if prediction_format == '1-1':
-                length = '1 visit'
-                for key, value in patient.iloc[visit].items():
-                    detail += f'- {key}: {value}\n' if key != 'Outcome' else ''
-            elif prediction_format == 'N-1_batches':
-                    for i, row in enumerate(patient.iterrows()):
-                        if i <= visit:
-                            detail += f'Visit {i + 1}:\n'
-                            for key, value in row[1].items():
-                                detail += f'- {key}: {value}\n' if key != 'Outcome' else ''
-                            detail += '\n' if i < visit else ''
-            elif prediction_format == 'N-1_string':
-                detail += f'- PatientID: {patient.iloc[0]["PatientID"]}\n'
-                for row, column in patient.items():
-                    if row != 'Outcome' and row != 'PatientID':
-                        values = list(map(str, column.values[:visit + 1]))
-                        detail += f'- {row}: \"{", ".join(values)}\"\n'
-            elif prediction_format == 'N-1_list':
-                detail += f'- PatientID: {patient.iloc[0]["PatientID"]}\n'
-                for row, column in patient.items():
-                    if row != 'Outcome' and row != 'PatientID':
-                        values = list(map(str, column.values[:visit + 1]))
-                        detail += f'- {row}: [{", ".join(values)}]\n'
+            detail = format_input(
+                patient=patient,
+                dataset=dataset,
+                prediction_format=prediction_format,
+                visit=visit,
+            )
             # with open('prompt.txt', 'w') as f:
             #     f.write(open(USERPROMPT[prediction_format], 'r').read().format(
             #         length=length,
