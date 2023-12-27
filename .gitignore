@@ -8,6 +8,7 @@ logits/
 performance/
 ipynb4prepare/
 config/config.py
+*.ipynb
 
 # C extensions
 *.so
