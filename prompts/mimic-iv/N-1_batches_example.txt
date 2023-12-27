@@ -1,0 +1,230 @@
+Here is one example:
+Input patient information:
+This Patient had 9 visits with the following details:
+Visit 1:
+- PatientID: 10000032_1
+- RecordTime: 0
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Confused
+- Diastolic blood pressure: 56.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 94.0
+- Height: nan
+- Mean blood pressure: 64.0
+- Oxygen saturation: 97.0
+- Respiratory rate: 23.0
+- Systolic blood pressure: 88.0
+- Temperature: 37.05555555555556
+- Weight: 39.3264264
+- pH: nan
+
+Visit 2:
+- PatientID: 10000032_1
+- RecordTime: 1
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Confused
+- Diastolic blood pressure: 56.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 105.0
+- Height: nan
+- Mean blood pressure: 64.0
+- Oxygen saturation: 94.0
+- Respiratory rate: 21.0
+- Systolic blood pressure: 88.0
+- Temperature: 37.05555555555556
+- Weight: 39.3264264
+- pH: nan
+
+Visit 3:
+- PatientID: 10000032_1
+- RecordTime: 2
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Confused
+- Diastolic blood pressure: 58.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 97.0
+- Height: nan
+- Mean blood pressure: 67.0
+- Oxygen saturation: 95.0
+- Respiratory rate: 20.0
+- Systolic blood pressure: 95.0
+- Temperature: 37.05555555555556
+- Weight: 39.3264264
+- pH: nan
+
+Visit 4:
+- PatientID: 10000032_1
+- RecordTime: 3
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Confused
+- Diastolic blood pressure: 53.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 100.0
+- Height: nan
+- Mean blood pressure: 60.0
+- Oxygen saturation: 95.0
+- Respiratory rate: 21.0
+- Systolic blood pressure: 86.0
+- Temperature: 37.05555555555556
+- Weight: 39.3264264
+- pH: nan
+
+Visit 5:
+- PatientID: 10000032_1
+- RecordTime: 4
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Oriented
+- Diastolic blood pressure: 41.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 97.0
+- Height: nan
+- Mean blood pressure: 56.0
+- Oxygen saturation: 98.0
+- Respiratory rate: 16.0
+- Systolic blood pressure: 93.0
+- Temperature: 37.05555555555556
+- Weight: 39.3264264
+- pH: nan
+
+Visit 6:
+- PatientID: 10000032_1
+- RecordTime: 5
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Oriented
+- Diastolic blood pressure: 57.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 100.0
+- Height: nan
+- Mean blood pressure: 64.0
+- Oxygen saturation: 99.0
+- Respiratory rate: 19.0
+- Systolic blood pressure: 90.0
+- Temperature: 37.5
+- Weight: 39.3264264
+- pH: nan
+
+Visit 7:
+- PatientID: 10000032_1
+- RecordTime: 6
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Oriented
+- Diastolic blood pressure: 57.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 94.0
+- Height: nan
+- Mean blood pressure: 64.0
+- Oxygen saturation: 95.0
+- Respiratory rate: 22.0
+- Systolic blood pressure: 90.0
+- Temperature: 37.5
+- Weight: 39.3264264
+- pH: nan
+
+Visit 8:
+- PatientID: 10000032_1
+- RecordTime: 7
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Oriented
+- Diastolic blood pressure: 55.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 94.0
+- Height: nan
+- Mean blood pressure: 62.0
+- Oxygen saturation: 95.0
+- Respiratory rate: 20.0
+- Systolic blood pressure: 85.0
+- Temperature: 37.5
+- Weight: 39.3264264
+- pH: nan
+
+Visit 9:
+- PatientID: 10000032_1
+- RecordTime: 8
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Oriented
+- Diastolic blood pressure: 55.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 94.0
+- Height: nan
+- Mean blood pressure: 62.0
+- Oxygen saturation: 95.0
+- Respiratory rate: 20.0
+- Systolic blood pressure: 85.0
+- Temperature: 37.5
+- Weight: 39.3264264
+- pH: nan
+
+RESPONSE:
+0.3

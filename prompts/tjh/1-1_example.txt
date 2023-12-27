@@ -5,7 +5,6 @@ This Patient had a visit with the following details:
 - RecordTime: 2020-02-05
 - AdmissionTime: 2020-02-04
 - DischargeTime: 2020-02-17
-- LOS: 12
 - Sex: 1
 - Age: 52
 - Hypersensitive cardiac troponinI: nan

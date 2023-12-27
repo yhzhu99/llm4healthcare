@@ -1,0 +1,29 @@
+Here is one example:
+Input patient information:
+This Patient had 9 visits with the following details:
+- PatientID: "10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1"
+- RecordTime: "0, 1, 2, 3, 4, 5, 6, 7, 8"
+- AdmissionTime: "2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00"
+- DischargeTime: "2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47"
+- Sex: "0, 0, 0, 0, 0, 0, 0, 0, 0"
+- Age: "52, 52, 52, 52, 52, 52, 52, 52, 52"
+- Capillary refill rate: "nan, nan, nan, nan, nan, nan, nan, nan, nan"
+- Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously"
+- Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
+- Glascow coma scale total: "nan, nan, nan, nan, nan, nan, nan, nan, nan"
+- Glascow coma scale verbal response: "Confused, Confused, Confused, Confused, Oriented, Oriented, Oriented, Oriented, Oriented"
+- Diastolic blood pressure: "56.0, 56.0, 58.0, 53.0, 41.0, 57.0, 57.0, 55.0, 55.0"
+- Fraction inspired oxygen: "nan, nan, nan, nan, nan, nan, nan, nan, nan"
+- Glucose: "115.0, 115.0, 115.0, 115.0, 115.0, 115.0, 115.0, 115.0, 115.0"
+- Heart Rate: "94.0, 105.0, 97.0, 100.0, 97.0, 100.0, 94.0, 94.0, 94.0"
+- Height: "nan, nan, nan, nan, nan, nan, nan, nan, nan"
+- Mean blood pressure: "64.0, 64.0, 67.0, 60.0, 56.0, 64.0, 64.0, 62.0, 62.0"
+- Oxygen saturation: "97.0, 94.0, 95.0, 95.0, 98.0, 99.0, 95.0, 95.0, 95.0"
+- Respiratory rate: "23.0, 21.0, 20.0, 21.0, 16.0, 19.0, 22.0, 20.0, 20.0"
+- Systolic blood pressure: "88.0, 88.0, 95.0, 86.0, 93.0, 90.0, 90.0, 85.0, 85.0"
+- Temperature: "37.05555555555556, 37.05555555555556, 37.05555555555556, 37.05555555555556, 37.05555555555556, 37.5, 37.5, 37.5, 37.5"
+- Weight: "39.3264264, 39.3264264, 39.3264264, 39.3264264, 39.3264264, 39.3264264, 39.3264264, 39.3264264, 39.3264264"
+- pH: "nan, nan, nan, nan, nan, nan, nan, nan, nan"
+
+RESPONSE:
+0.3

@@ -1,0 +1,29 @@
+Here is one example:
+Input patient information:
+This Patient had 1 visit with the following details:
+- PatientID: 10000032_1
+- RecordTime: 8
+- AdmissionTime: 2180-07-23 14:00:00
+- DischargeTime: 2180-07-23 23:50:47
+- Sex: 0
+- Age: 52
+- Capillary refill rate: nan
+- Glascow coma scale eye opening: Spontaneously
+- Glascow coma scale motor response: Obeys Commands
+- Glascow coma scale total: nan
+- Glascow coma scale verbal response: Oriented
+- Diastolic blood pressure: 55.0
+- Fraction inspired oxygen: nan
+- Glucose: 115.0
+- Heart Rate: 94.0
+- Height: nan
+- Mean blood pressure: 62.0
+- Oxygen saturation: 95.0
+- Respiratory rate: 20.0
+- Systolic blood pressure: 85.0
+- Temperature: 37.5
+- Weight: 39.3264264
+- pH: nan
+
+RESPONSE:
+0.3
