@@ -52,7 +52,7 @@ def format_input(
         for feature in lab_features['Categorical']:
             features.append(feature)
             columns = patient.columns[patient.columns.str.startswith(feature)]
-            rows = [patient.columns[res] for res in (patient[columns] == 1.0).values]
+            rows = [columns[res] for res in (patient[columns] == 1.0).values]
             values = [row.item().split('->')[-1] if len(row) > 0 else 'nan' for row in rows]
             feature_values[feature] = values[:visit + 1]
         for feature in lab_features['Numerical']:
@@ -63,7 +63,10 @@ def format_input(
             features.append(feature)
             feature_values[feature] = patient[feature].values[:visit + 1]
     detail = ''
-    if prediction_format == 'N-1_string':
+    if prediction_format == '1-1':
+        for feature in features:
+            detail += f'- {feature}: {feature_values[feature][visit]}\n'
+    elif prediction_format == 'N-1_string':
         for feature in features:
             detail += f'- {feature}: \"{", ".join(list(map(str, feature_values[feature])))}\"\n'
     elif prediction_format == 'N-1_list':
@@ -133,8 +136,11 @@ def run(
     for visit in range(visits - 1, visits):
         label = []
         pred = []
-        length = f'{visit + 1} visit'
-        length += 's' if visit > 0 else ''
+        if prediction_format == '1-1':
+            length = '1 visit'
+        else:
+            length = f'{visit + 1} visit'
+            length += 's' if visit > 0 else ''
         for patient in grouped_patients:
             if len(patient) <= visit:
                 continue 
@@ -193,5 +199,5 @@ def run(
     }, os.path.join(dst_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
 
 if __name__ == '__main__':
-    for config in params[:2]:
+    for config in params:
         run(config)
