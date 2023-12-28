@@ -7,8 +7,10 @@ prompts/test/
 logits/
 performance/
 ipynb4prepare/
+datasets/
 config/config.py
 *.ipynb
+*.csv
 
 # C extensions
 *.so
