@@ -1,0 +1,38 @@
+I will provide you with a patient's medical information from multiple ICU visits, each visit characterized by a fixed number of features.
+{input format description}
+Missing values will be represented as 'nan'.
+{task description and response format}
+In situations where the data does not allow for a reasonable conclusion, please respond with "I don't know" without any additional explanation.
+
+{unit_range context}
+{example}
+Input patient information:
+This Patient had {length} with the following details:
+{detail}
+RESPONSE:
+
+
+
+
+input format description:
+String:
+Present the patient's multiple visit data in a single batch using the string format. Each feature within this data is represented as a string of values, with each value separated by commas.
+
+List:
+Display the patient's multiple visit data in a single batch, where each feature is expressed as a list of values.
+
+Batches:
+Organize the patient's visit data into separate batches, with each batch corresponding to an individual visit.
+
+task description:
+In-hospital Mortality Prediction: 
+Your task is to assess the provided medical data and analyze the patient's health records from their ICU visits to determine the likelihood of the patient not surviving their hospital stay.
+You should respond with a floating-point number between 0 and 1, where a higher number indicates a greater likelihood of death.
+
+Length of Stay Prediction:
+Your task is to evaluate the patient's medical data to estimate the remaining duration of their stay in the ICU. Consider the progression of the patient's health across multiple visits to forecast how much longer they will need intensive care.
+You should respond with an integer representing the number of days they are expected to spend in the ICU.
+
+30 Days Readmission Prediction:
+Your task is to analyze the patient's medical history to predict the probability of their readmission within 30 days post-discharge. This includes cases where a patient passes away within 30 days from the discharge date, which should also be considered as a readmission.
+You should respond with a floating-point number between 0 and 1, where a higher number indicates a greater likelihood of readmission.
