@@ -1,8 +1,6 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
+#############################################
+# self defined
+###############
 prompts/test/
 logits/
 performance/
@@ -11,6 +9,12 @@ datasets/
 config/config.py
 *.ipynb
 *.csv
+#############################################
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
 # C extensions
 *.so
