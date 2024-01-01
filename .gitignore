@@ -11,6 +11,9 @@ datasets/mimic-iv/processed/
 datasets/mimic-iv/raw/
 config/config.py
 *.csv
+demo.ipynb
+debug.py
+debug.ipynb
 #############################################
 
 # Byte-compiled / optimized / DLL files
