@@ -14,6 +14,7 @@ config/config.py
 demo.ipynb
 debug.py
 debug.ipynb
+prompt.txt
 #############################################
 
 # Byte-compiled / optimized / DLL files
