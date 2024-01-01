@@ -35,44 +35,48 @@ def query_llm(
     return result.choices[0].message.content, result.usage.prompt_tokens, result.usage.completion_tokens
 
 def format_input(
-    patient: pd.DataFrame,
+    patient: List,
     dataset: str,
     form: str,
-    features: List[str]
+    features: List[str],
 ):
-    # basic_features = FEATURES[dataset]['Basic']
-    # demo_features = FEATURES[dataset]['Demographics']
-    # lab_features = FEATURES[dataset]['Laboratory']
-    # features = []
-    # feature_values = {}
-    # if dataset == 'mimic-iv':
-    #     for feature in basic_features + demo_features:
-    #         features.append(feature)
-    #         feature_values[feature] = patient[feature].values[:visit + 1]
-    #     for feature in lab_features['Categorical']:
-    #         features.append(feature)
-    #         columns = patient.columns[patient.columns.str.startswith(feature)]
-    #         rows = [columns[res] for res in (patient[columns] == 1.0).values]
-    #         values = [row.item().split('->')[-1] if len(row) > 0 else 'nan' for row in rows]
-    #         feature_values[feature] = values[:visit + 1]
-    #     for feature in lab_features['Numerical']:
-    #         features.append(feature)
-    #         feature_values[feature] = patient[feature].values[:visit + 1]
-    # elif dataset == 'tjh':
-    #     for feature in basic_features + demo_features + lab_features:
-    #         features.append(feature)
-    #         feature_values[feature] = patient[feature].values[:visit + 1]
+    feature_values = {}
+    numerical_features = ['Diastolic blood pressure', 'Fraction inspired oxygen', 'Glucose', 'Heart Rate', 'Height', 'Mean blood pressure', 'Oxygen saturation', 'Respiratory rate', 'Systolic blood pressure', 'Temperature', 'Weight', 'pH']
+    categorical_features = ['Capillary refill rate', 'Glascow coma scale eye opening', 'Glascow coma scale motor response', 'Glascow coma scale total', 'Glascow coma scale verbal response']
+    if dataset == 'mimic-iv':
+        for i, feature in enumerate(features):
+            if feature in numerical_features:
+                feature_values[feature] = [str(visit[i]) for visit in patient]
+        for categorical_feature in categorical_features:
+            indexes = [i for i, f in enumerate(features) if f.startswith(categorical_feature)]
+            feature_values[categorical_feature] = []
+            for visit in patient:
+                values = [visit[i] for i in indexes]
+                if sum(values) == 0:
+                    pass
+                else:
+                    for i in indexes:
+                        if visit[i] == 1:
+                            feature_values[categorical_feature].append(features[i].split('->')[-1])
+                            break
+        features = categorical_features + numerical_features
+    elif dataset == 'tjh':
+        for i, feature in enumerate(features):
+            feature_values[feature] = [str(visit[i]) for visit in patient]
+
     detail = ''
-    if dataset == 'tjh':
-        if form == 'string':
-            for i, name in enumerate(features):
-                detail += f'- {name}: \"{", ".join([str(visit[2 + i]) for visit in patient])}\"\n'
-        elif form == 'batches':
-            for i, visit in enumerate(patient):
-                detail += f'Visit {i+1}:\n'
-                for j, name in enumerate(features):
-                    detail += f'- {name}: \"{visit[2 + j]}\"\n'
-                detail += '\n'
+    if form == 'string':
+        for feature in features:
+            detail += f'- {feature}: \"{", ".join(feature_values[feature])}\"\n'
+    elif form == 'list':
+        for feature in features:
+            detail += f'- {feature}: [{", ".join(feature_values[feature])}]\n'
+    elif form == 'batches':
+        for i, visit in enumerate(patient):
+            detail += f'Visit {i + 1}:\n'
+            for feature in features:
+                detail += f'- {feature}: {feature_values[feature][i]}\n'
+            detail += '\n'
     return detail
 
 def run(
@@ -121,12 +125,11 @@ def run(
     labels = []
     preds = []
  
-    for x, y, record_time in zip(xs, ys, record_times):
-    # patient = xs[0]
-    # record_time = record_times[0]
+    for x, y, record_time in zip(xs[:5], ys[:5], record_times[:5]):
         length = len(x)
         sex = 'male' if x[0][0] == 1 else 'female'
         age = x[0][1]
+        x = [visit[2:] for visit in x]
         detail = format_input(
             patient=x,
             dataset=dataset,
@@ -141,11 +144,11 @@ def run(
             SEX=sex,
             AGE=age,
             LENGTH=length,
-            RECORD_TIME_LIST=', '.join(record_time),
+            RECORD_TIME_LIST=', '.join(list(map(str, record_time))),
             DETAIL=detail,
         )
-    # with open('prompt.txt', 'w') as f:
-    #     f.write(userPrompt)
+        # with open('prompt.txt', 'w') as f:
+        #     f.write(userPrompt)
         try:
             result, prompt_token, completion_token = query_llm(
                 model=config['model'],
@@ -154,12 +157,14 @@ def run(
             )
         except Exception as e:
             # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-            # logging.info(f'{e}')
+            logging.info(f'{e}')
             continue
         prompt_tokens += prompt_token
         completion_tokens += completion_token
         if task == 'outcome':
             labels.append(y[0][0])
+        elif task == 'readmission':
+            labels.append(y[0][2])
         try:
             preds.append(float(result))
         except:
@@ -169,7 +174,7 @@ def run(
     
     logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')
     
-    dst_path = os.path.join(dst_root, dataset, config['model'], form)
+    dst_path = os.path.join(dst_root, dataset, task, config['model'])
     Path(dst_path).mkdir(parents=True, exist_ok=True)
     pd.to_pickle({
         'config': config,
