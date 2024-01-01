@@ -18,7 +18,7 @@ from prompts.prompt import *
 
 logging.basicConfig(filename=f'logs/{dt.now().strftime("%Y%m%d")}.log', level=logging.INFO, format='%(asctime)s\n%(message)s')
 
-@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
+# @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def query_llm(
     model: str,
     systemPrompt: str,
@@ -108,6 +108,7 @@ def run(
     form = config['form']
     assert form in ['string', 'batches', 'list'], f'Unknown form: {form}'
     
+    nshot = config['n_shot']
     # if config['shot'] is True:
     #     example = open(EXAMPLE[dataset][prediction_format]).read() + '\n'
     # else:
@@ -120,12 +121,16 @@ def run(
     
     xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
     ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
+    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
     record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
     preds = []
+    
+    dst_path = os.path.join(dst_root, dataset, task, config['model'])
+    Path(dst_path).mkdir(parents=True, exist_ok=True)
  
-    for x, y, record_time in zip(xs[:5], ys[:5], record_times[:5]):
+    for x, y, pid, record_time in zip(xs, ys, pids, record_times):
         length = len(x)
         sex = 'male' if x[0][0] == 1 else 'female'
         age = x[0][1]
@@ -149,6 +154,7 @@ def run(
         )
         # with open('prompt.txt', 'w') as f:
         #     f.write(userPrompt)
+        # break
         try:
             result, prompt_token, completion_token = query_llm(
                 model=config['model'],
@@ -162,20 +168,31 @@ def run(
         prompt_tokens += prompt_token
         completion_tokens += completion_token
         if task == 'outcome':
-            labels.append(y[0][0])
+            label = y[0][0]
         elif task == 'readmission':
-            labels.append(y[0][2])
+            label = y[0][2]
+        elif task == 'los':
+            pass
         try:
-            preds.append(float(result))
+            pred = float(result)
         except:
-            preds.append(0.501)
+            pred = 0.501
             # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
             # logging.info(f'UserPrompt:{userPrompt}\nResponse: {result}\n')
-    
-    logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')
-    
-    dst_path = os.path.join(dst_root, dataset, task, config['model'])
-    Path(dst_path).mkdir(parents=True, exist_ok=True)
+        name = str(pid) + '_' + form + '_' + nshot + 'shot'
+        if config['unit'] is True:
+            name += '_unit'
+        if config['reference_range'] is True:
+            name += '_range'
+        pd.to_pickle({
+            'prompt': userPrompt,
+            'label': label,
+            'pred': pred,
+        }, os.path.join(dst_path, f'{name}.pkl'))
+        labels.append(label)
+        preds.append(pred)
+
+    logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')    
     pd.to_pickle({
         'config': config,
         'preds': preds,
