@@ -10,7 +10,6 @@ datasets/tjh/raw/
 datasets/mimic-iv/processed/
 datasets/mimic-iv/raw/
 config/config.py
-*.ipynb
 *.csv
 #############################################
 
