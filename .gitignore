@@ -5,7 +5,10 @@ prompts/test/
 logits/
 performance/
 ipynb4prepare/
-datasets/
+datasets/tjh/processed/
+datasets/tjh/raw/
+datasets/mimic-iv/processed/
+datasets/mimic-iv/raw/
 config/config.py
 *.ipynb
 *.csv
