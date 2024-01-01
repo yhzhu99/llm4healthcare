@@ -1,10 +1,4 @@
 {
-    "PatientID": "Reference range: /.",
-    "RecordTime": "Reference range: /.",
-    "AdmissionTime": "Reference range: /.",
-    "DischargeTime": "Reference range: /.",
-    "Sex(0 for women, 1 for men)": "Reference range: /.",
-    "Age": "Reference range: /.",
     "Hypersensitive cardiac troponinI": "Reference range: less than 14.",
     "hemoglobin": "Reference range: 14 - 18 for men, 12 - 16 for women.",
     "Serum chloride": "Reference range: 96 - 106.",

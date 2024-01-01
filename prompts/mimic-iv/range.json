@@ -1,10 +1,4 @@
 {
-    "PatientID": "Reference range: /.",
-    "RecordTime": "Reference range: /.",
-    "AdmissionTime": "Reference range: /.",
-    "DischargeTime": "Reference range: /.",
-    "Sex(0 for women, 1 for men)": "Reference range: /.",
-    "Age": "Reference range: /.",
     "Capillary refill rate": "Reference range: /.",
     "Glascow coma scale eye opening": "Reference range: /.",
     "Glascow coma scale motor response": "Reference range: /.",

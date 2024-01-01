@@ -1,10 +1,4 @@
 {
-    "PatientID": "Unit: /.",
-    "RecordTime": "Unit: /.",
-    "AdmissionTime": "Unit: /.",
-    "DischargeTime": "Unit: /.",
-    "Sex(0 for women, 1 for men)": "Unit: /.",
-    "Age": "Unit: years.",
     "Hypersensitive cardiac troponinI": "Unit: ng/L.",
     "hemoglobin": "Unit: g/dL.",
     "Serum chloride": "Unit: mmol/L.",

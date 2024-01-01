@@ -1,10 +1,4 @@
 {
-    "PatientID": "Unit: /.",
-    "RecordTime": "Unit: /.",
-    "AdmissionTime": "Unit: /.",
-    "DischargeTime": "Unit: /.",
-    "Sex(0 for women, 1 for men)": "Unit: /.",
-    "Age": "Unit: years.",
     "Capillary refill rate": "Unit: /.",
     "Glascow coma scale eye opening": "Unit: /.",
     "Glascow coma scale motor response": "Unit: /.",
