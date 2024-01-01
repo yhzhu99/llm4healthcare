@@ -19,7 +19,7 @@ INPUT_FORMAT_DESCRIPTION = {
 TASK_DESCRIPTION_AND_RESPONSE_FORMAT = {
     'outcome': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay. Please respond with a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',
     'los': 'Your task is to Evaluate the provided medical data to estimate the remaining duration of the ICU stay. Consider the progression of health across multiple visits to forecast the length of intensive care needed. Please respond with an integer indicating the number of days expected in the ICU.',
-    'readmission': '',
+    'readmission': 'Your task is to analyze the medical history to predict the probability of readmission within 30 days post-discharge. Include cases where a patient passes away within 30 days from the discharge date. Please respond with a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of readmission.',
 }
 # USERPROMPT = {
 #     '1-1': 'prompts/1-1_prompt.txt',
