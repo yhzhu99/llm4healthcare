@@ -12,7 +12,9 @@ In situations where the data does not allow for a reasonable conclusion, respond
 
 Input information of a patient:
 
-The patient had {LENGTH} visits that occurred at {RECORD_TIME_LIST}. Details of the features for each visit are as follows:
+The patient is a {SEX}, aged {AGE} years.
+The patient had {LENGTH} visits that occurred at {RECORD_TIME_LIST}.
+Details of the features for each visit are as follows:
 
 {DETAIL}
 
