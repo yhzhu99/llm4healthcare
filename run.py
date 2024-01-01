@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Dict
+from typing import Dict, List
 from pathlib import Path
 from datetime import datetime as dt
 import logging
@@ -37,47 +37,42 @@ def query_llm(
 def format_input(
     patient: pd.DataFrame,
     dataset: str,
-    prediction_format: str,
-    visit: int,
+    form: str,
+    features: List[str]
 ):
-    basic_features = FEATURES[dataset]['Basic']
-    demo_features = FEATURES[dataset]['Demographics']
-    lab_features = FEATURES[dataset]['Laboratory']
-    features = []
-    feature_values = {}
-    if dataset == 'mimic-iv':
-        for feature in basic_features + demo_features:
-            features.append(feature)
-            feature_values[feature] = patient[feature].values[:visit + 1]
-        for feature in lab_features['Categorical']:
-            features.append(feature)
-            columns = patient.columns[patient.columns.str.startswith(feature)]
-            rows = [columns[res] for res in (patient[columns] == 1.0).values]
-            values = [row.item().split('->')[-1] if len(row) > 0 else 'nan' for row in rows]
-            feature_values[feature] = values[:visit + 1]
-        for feature in lab_features['Numerical']:
-            features.append(feature)
-            feature_values[feature] = patient[feature].values[:visit + 1]
-    elif dataset == 'tjh':
-        for feature in basic_features + demo_features + lab_features:
-            features.append(feature)
-            feature_values[feature] = patient[feature].values[:visit + 1]
+    # basic_features = FEATURES[dataset]['Basic']
+    # demo_features = FEATURES[dataset]['Demographics']
+    # lab_features = FEATURES[dataset]['Laboratory']
+    # features = []
+    # feature_values = {}
+    # if dataset == 'mimic-iv':
+    #     for feature in basic_features + demo_features:
+    #         features.append(feature)
+    #         feature_values[feature] = patient[feature].values[:visit + 1]
+    #     for feature in lab_features['Categorical']:
+    #         features.append(feature)
+    #         columns = patient.columns[patient.columns.str.startswith(feature)]
+    #         rows = [columns[res] for res in (patient[columns] == 1.0).values]
+    #         values = [row.item().split('->')[-1] if len(row) > 0 else 'nan' for row in rows]
+    #         feature_values[feature] = values[:visit + 1]
+    #     for feature in lab_features['Numerical']:
+    #         features.append(feature)
+    #         feature_values[feature] = patient[feature].values[:visit + 1]
+    # elif dataset == 'tjh':
+    #     for feature in basic_features + demo_features + lab_features:
+    #         features.append(feature)
+    #         feature_values[feature] = patient[feature].values[:visit + 1]
     detail = ''
-    if prediction_format == '1-1':
-        for feature in features:
-            detail += f'- {feature}: {feature_values[feature][visit]}\n'
-    elif prediction_format == 'N-1_string':
-        for feature in features:
-            detail += f'- {feature}: \"{", ".join(list(map(str, feature_values[feature])))}\"\n'
-    elif prediction_format == 'N-1_list':
-        for feature in features:
-            detail += f'- {feature}: [{", ".join(list(map(str, feature_values[feature])))}]\n'
-    elif prediction_format == 'N-1_batches':
-        for i in range(visit + 1):
-            detail += f'Visit {i + 1}:\n'
-            for feature in features:
-                detail += f'- {feature}: {feature_values[feature][i]}\n'
-            detail += '\n' if i < visit else ''
+    if dataset == 'tjh':
+        if form == 'string':
+            for i, name in enumerate(features):
+                detail += f'- {name}: \"{", ".join([str(visit[2 + i]) for visit in patient])}\"\n'
+        elif form == 'batches':
+            for i, visit in enumerate(patient):
+                detail += f'Visit {i+1}:\n'
+                for j, name in enumerate(features):
+                    detail += f'- {name}: \"{visit[2 + j]}\"\n'
+                detail += '\n'
     return detail
 
 def run(
@@ -92,105 +87,89 @@ def run(
     prompt_tokens = 0
     completion_tokens = 0
     
-    if config['unit'] is True or config['range'] is True:
-        unit_range = UNIT_RANGE_PROMPT
+    if config['unit'] is True or config['reference_range'] is True:
+        unit_range = ''
         unit_values = dict(json.load(open(UNIT[dataset])))
-        range_values = dict(json.load(open(RANGE[dataset])))
+        range_values = dict(json.load(open(REFERENCE_RANGE[dataset])))
         for feature in unit_values.keys():
             unit_range += f'- {feature}: '
             if config['unit'] is True:
                 unit_range = unit_range + unit_values[feature] + ' '
-            if config['range'] is True:
+            if config['reference_range'] is True:
                 unit_range = unit_range + range_values[feature]
-            unit_range += "\n"
+            unit_range += '\n'
     else:
         unit_range = ''
         
-    prediction = config['prediction']
-    if prediction == '1-1':
-        prediction_format = prediction
-    elif prediction == 'N-1':
-        prediction_format = prediction + f'_{config["format"]}'
-    elif prediction == 'N-N':
-        pass
-    else:
-        raise Exception(f'Unknown prediction type: {prediction}')
-        
-    if config['shot'] is True:
-        example = open(EXAMPLE[dataset][prediction_format]).read() + '\n'
-    else:
-        example = ''
-        
-    patients = pd.read_csv(DATASETS_PATH[dataset])
-    grouped_patients = [item[1] for item in patients.groupby(['PatientID'])]
-    if config['forwardfill'] is True:
-        filled_values = patients[patients.columns[8:]].median(skipna=True).to_dict()
-        for patient in grouped_patients:
-            patient.fillna(method='ffill', inplace=True)
-            patient.fillna(value=filled_values, inplace=True)
-    visit_range = range(max([len(patient) for patient in grouped_patients]))
-    visits = max([len(patient) for patient in grouped_patients])
+    form = config['form']
+    assert form in ['string', 'batches', 'list'], f'Unknown form: {form}'
+    
+    # if config['shot'] is True:
+    #     example = open(EXAMPLE[dataset][prediction_format]).read() + '\n'
+    # else:
+    #     example = ''
+    example = ''
+    
+    dataset_path = f'datasets/{dataset}/processed/fold_llm'
+    task = config['task']
+    assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
+    
+    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
+    features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
+    record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
     preds = []
-    
-    for visit in range(visits - 1, visits):
-        label = []
-        pred = []
-        if prediction_format == '1-1':
-            length = '1 visit'
-        else:
-            length = f'{visit + 1} visit'
-            length += 's' if visit > 0 else ''
-        for patient in grouped_patients:
-            if len(patient) <= visit:
-                continue 
-            detail = format_input(
-                patient=patient,
-                dataset=dataset,
-                prediction_format=prediction_format,
-                visit=visit,
+ 
+    for x, y, record_time in zip(xs, ys, record_times):
+    # patient = xs[0]
+    # record_time = record_times[0]
+        length = len(x)
+        sex = 'male' if x[0][0] == 1 else 'female'
+        age = x[0][1]
+        detail = format_input(
+            patient=x,
+            dataset=dataset,
+            form=form,
+            features=features,
+        )
+        userPrompt = open('prompts/template.txt', 'r').read().format(
+            INPUT_FORMAT_DESCRIPTION=INPUT_FORMAT_DESCRIPTION[form],
+            TASK_DESCRIPTION_AND_RESPONSE_FORMAT=TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task],
+            UNIT_RANGE_CONTEXT=unit_range,
+            EXAMPLE=example,
+            SEX=sex,
+            AGE=age,
+            LENGTH=length,
+            RECORD_TIME_LIST=', '.join(record_time),
+            DETAIL=detail,
+        )
+    # with open('prompt.txt', 'w') as f:
+    #     f.write(userPrompt)
+        try:
+            result, prompt_token, completion_token = query_llm(
+                model=config['model'],
+                systemPrompt=SYSTEMPROMPT,
+                userPrompt=userPrompt
             )
-            # with open('prompt.txt', 'w') as f:
-            #     f.write(open(USERPROMPT[prediction_format], 'r').read().format(
-            #         length=length,
-            #         detail=detail,
-            #         unit_range=unit_range,
-            #         example=example,
-            #     ))
-            userPrompt = open(USERPROMPT[prediction_format], 'r').read().format(
-                length=length,
-                detail=detail,
-                unit_range=unit_range,
-                example=example,
-            )
-            try:
-                result, prompt_token, completion_token = query_llm(
-                    model=config['model'],
-                    systemPrompt=SYSTEMPROMPT,
-                    userPrompt=userPrompt
-                )
-            except Exception as e:
-                logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}, Visit: {visit + 1}:\n')
-                logging.info(f'{e}')
-                continue
-            label.append(float(patient.iloc[visit]['Outcome']))
-            prompt_tokens += prompt_token
-            completion_tokens += completion_token
-            try:
-                pred.append(float(result))
-            except:
-                pred.append(0.501)
-                logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}, Visit: {visit + 1}:\n')
-                logging.info(f'UserPrompt:{userPrompt}\nResponse: {result}\n')
-        labels.append(label)
-        preds.append(pred)
+        except Exception as e:
+            # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
+            # logging.info(f'{e}')
+            continue
+        prompt_tokens += prompt_token
+        completion_tokens += completion_token
+        if task == 'outcome':
+            labels.append(y[0][0])
+        try:
+            preds.append(float(result))
+        except:
+            preds.append(0.501)
+            # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
+            # logging.info(f'UserPrompt:{userPrompt}\nResponse: {result}\n')
     
     logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')
-    if config['shot'] is True:
-        shot = 'oneshot'
-    else:
-        shot = 'zeroshot'
-    dst_path = os.path.join(dst_root, config['model'], prediction_format, shot)
+    
+    dst_path = os.path.join(dst_root, dataset, config['model'], form)
     Path(dst_path).mkdir(parents=True, exist_ok=True)
     pd.to_pickle({
         'config': config,
