@@ -119,9 +119,9 @@ def run(
     task = config['task']
     assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
     
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))[:5]
-    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))[:5]
-    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))[:5]
+    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
+    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
     record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
@@ -148,7 +148,7 @@ def run(
             form=form,
             features=features,
         )
-        userPrompt = open('prompts/template.txt', 'r').read().format(
+        userPrompt = USERPROMPT.format(
             INPUT_FORMAT_DESCRIPTION=INPUT_FORMAT_DESCRIPTION[form],
             TASK_DESCRIPTION_AND_RESPONSE_FORMAT=TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task],
             UNIT_RANGE_CONTEXT=unit_range,
@@ -159,9 +159,8 @@ def run(
             RECORD_TIME_LIST=', '.join(list(map(str, record_time))),
             DETAIL=detail,
         )
-        # with open('prompt.txt', 'w') as f:
+        # with open(os.path.join(sub_dst_path, f'{round(pid)}.txt'), 'w') as f:
         #     f.write(userPrompt)
-        # break
         try:
             result, prompt_token, completion_token = query_llm(
                 model=config['model'],
