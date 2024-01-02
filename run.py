@@ -211,14 +211,15 @@ def run(
             }, os.path.join(sub_logits_path, f'{round(pid)}.pkl'))
             labels.append(label)
             preds.append(pred)
-
-    logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')    
-    pd.to_pickle({
-        'config': config,
-        'preds': preds,
-        'labels': labels,
-    }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
+    
+    if output_logits:
+        logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')    
+        pd.to_pickle({
+            'config': config,
+            'preds': preds,
+            'labels': labels,
+        }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
 
 if __name__ == '__main__':
     for config in params:
-        run(config, output_logits=False, output_prompts=True)
+        run(config, output_logits=True, output_prompts=False)
