@@ -81,7 +81,10 @@ def format_input(
 
 def run(
     config: Dict,
-    dst_root: str='logits',
+    output_logits: bool=True,
+    output_prompts: bool=False,
+    logits_root: str='logits',
+    prompts_root: str='logs',
 ):
     logging.info(f'Running config: {config}\n\n')
     
@@ -119,23 +122,34 @@ def run(
     task = config['task']
     assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
     
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
-    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
-    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
+    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))[:5]
+    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))[:5]
+    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))[:5]
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
     record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
     preds = []
     
-    dst_path = os.path.join(dst_root, dataset, task, config['model'])
-    Path(dst_path).mkdir(parents=True, exist_ok=True)
-    sub_dst_name = f'{form}_{str(nshot)}shot'
-    if config['unit'] is True:
-        sub_dst_name += '_unit'
-    if config['reference_range'] is True:
-        sub_dst_name += '_range'
-    sub_dst_path = os.path.join(dst_path, sub_dst_name)
-    Path(sub_dst_path).mkdir(parents=True, exist_ok=True)
+    if output_logits:
+        logits_path = os.path.join(logits_root, dataset, task, config['model'])
+        Path(logits_path).mkdir(parents=True, exist_ok=True)
+        sub_dst_name = f'{form}_{str(nshot)}shot'
+        if config['unit'] is True:
+            sub_dst_name += '_unit'
+        if config['reference_range'] is True:
+            sub_dst_name += '_range'
+        sub_logits_path = os.path.join(logits_path, sub_dst_name)
+        Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
+    if output_prompts:
+        prompts_path = os.path.join(prompts_root, dataset, task, config['model'])
+        Path(prompts_path).mkdir(parents=True, exist_ok=True)
+        sub_dst_name = f'{form}_{str(nshot)}shot'
+        if config['unit'] is True:
+            sub_dst_name += '_unit'
+        if config['reference_range'] is True:
+            sub_dst_name += '_range'
+        sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
+        Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
  
     for x, y, pid, record_time in zip(xs, ys, pids, record_times):
         length = len(x)
@@ -158,48 +172,53 @@ def run(
             LENGTH=length,
             RECORD_TIME_LIST=', '.join(list(map(str, record_time))),
             DETAIL=detail,
+            RESPONSE_FORMAT=RESPONSE_FORMAT[task],
         )
-        # with open(os.path.join(sub_dst_path, f'{round(pid)}.txt'), 'w') as f:
-        #     f.write(userPrompt)
-        try:
-            result, prompt_token, completion_token = query_llm(
-                model=config['model'],
-                systemPrompt=SYSTEMPROMPT,
-                userPrompt=userPrompt
-            )
-        except Exception as e:
-            # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-            logging.info(f'{e}')
-            continue
-        prompt_tokens += prompt_token
-        completion_tokens += completion_token
-        if task == 'outcome':
-            label = y[0][0]
-        elif task == 'readmission':
-            label = y[0][2]
-        elif task == 'los':
-            pass
-        try:
-            pred = float(result)
-        except:
-            pred = 0.501
-            # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-            # logging.info(f'UserPrompt:{userPrompt}\nResponse: {result}\n')
-        pd.to_pickle({
-            'prompt': userPrompt,
-            'label': label,
-            'pred': pred,
-        }, os.path.join(sub_dst_path, f'{round(pid)}.pkl'))
-        labels.append(label)
-        preds.append(pred)
+        if output_prompts:
+            with open(os.path.join(sub_prompts_path, f'{round(pid)}.txt'), 'w') as f:
+                f.write(userPrompt)
+        if output_logits:
+            try:
+                result, prompt_token, completion_token = query_llm(
+                    model=config['model'],
+                    systemPrompt=SYSTEMPROMPT,
+                    userPrompt=userPrompt
+                )
+            except Exception as e:
+                # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
+                logging.info(f'{e}')
+                continue
+            prompt_tokens += prompt_token
+            completion_tokens += completion_token
+            if task == 'outcome':
+                label = y[0][0]
+            elif task == 'readmission':
+                label = y[0][2]
+            elif task == 'los':
+                pass
+            try:
+                pred = float(result)
+            except:
+                pred = 0.501
+                if result == 'I do not know':
+                    pass
+                else:
+                    logging.info(f'PatientID: {round(pid)}:\nResponse: {result}\n')
+            pd.to_pickle({
+                'prompt': userPrompt,
+                'label': label,
+                'pred': pred,
+            }, os.path.join(sub_logits_path, f'{round(pid)}.pkl'))
+            labels.append(label)
+            preds.append(pred)
 
     logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')    
     pd.to_pickle({
         'config': config,
         'preds': preds,
         'labels': labels,
-    }, os.path.join(dst_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
+    }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
 
 if __name__ == '__main__':
     for config in params:
-        run(config)
+        run(config, output_logits=False, output_prompts=True)
