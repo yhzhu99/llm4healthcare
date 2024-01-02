@@ -75,7 +75,8 @@ def format_input(
         for i, visit in enumerate(patient):
             detail += f'Visit {i + 1}:\n'
             for feature in features:
-                detail += f'- {feature}: {feature_values[feature][i]}\n'
+                value = feature_values[feature][i] if i < len(feature_values[feature]) else 'nan'
+                detail += f'- {feature}: {value}\n'
             detail += '\n'
     return detail
 
@@ -112,19 +113,28 @@ def run(
     assert form in ['string', 'batches', 'list'], f'Unknown form: {form}'
     
     nshot = config['n_shot']
-    # if config['shot'] is True:
-    #     example = open(EXAMPLE[dataset][prediction_format]).read() + '\n'
-    # else:
-    #     example = ''
     example = ''
+    if nshot > 0:
+        shot = open(EXAMPLE[dataset][form]).read()
+        for _ in range(nshot):
+            example += shot
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
     task = config['task']
     assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
+    time = config['time']
+    if time == 0:
+        time_des = 'upon-discharge'
+    elif time == 1:
+        time_des = '1month'
+    elif time == 2:
+        time_des = '6months'
+    else:
+        raise ValueError(f'Unknown time: {time}')
     
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))[5:]
-    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))[5:]
-    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))[5:]
+    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
+    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
     record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
@@ -133,7 +143,7 @@ def run(
     if output_logits:
         logits_path = os.path.join(logits_root, dataset, task, config['model'])
         Path(logits_path).mkdir(parents=True, exist_ok=True)
-        sub_dst_name = f'{form}_{str(nshot)}shot'
+        sub_dst_name = f'{form}_{str(nshot)}shot_{time_des}'
         if config['unit'] is True:
             sub_dst_name += '_unit'
         if config['reference_range'] is True:
@@ -143,7 +153,7 @@ def run(
     if output_prompts:
         prompts_path = os.path.join(prompts_root, dataset, task, config['model'])
         Path(prompts_path).mkdir(parents=True, exist_ok=True)
-        sub_dst_name = f'{form}_{str(nshot)}shot'
+        sub_dst_name = f'{form}_{str(nshot)}shot_{time_des}'
         if config['unit'] is True:
             sub_dst_name += '_unit'
         if config['reference_range'] is True:
@@ -152,6 +162,8 @@ def run(
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
  
     for x, y, pid, record_time in zip(xs, ys, pids, record_times):
+        if isinstance(pid, float):
+            pid = str(round(pid))
         length = len(x)
         sex = 'male' if x[0][0] == 1 else 'female'
         age = x[0][1]
@@ -175,7 +187,7 @@ def run(
             RESPONSE_FORMAT=RESPONSE_FORMAT[task],
         )
         if output_prompts:
-            with open(os.path.join(sub_prompts_path, f'{round(pid)}.txt'), 'w') as f:
+            with open(os.path.join(sub_prompts_path, f'{pid}.txt'), 'w') as f:
                 f.write(userPrompt)
         if output_logits:
             try:
@@ -203,15 +215,14 @@ def run(
                 if result == 'I do not know.':
                     pass
                 else:
-                    logging.info(f'PatientID: {round(pid)}:\nResponse: {result}\n')
+                    logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
             pd.to_pickle({
                 'prompt': userPrompt,
                 'label': label,
                 'pred': pred,
-            }, os.path.join(sub_logits_path, f'{round(pid)}.pkl'))
+            }, os.path.join(sub_logits_path, f'{pid}.pkl'))
             labels.append(label)
             preds.append(pred)
-    
     if output_logits:
         logging.info(f'Prompts: {prompt_tokens}, Completions: {completion_tokens}, Total: {prompt_tokens + completion_tokens}\n\n')    
         pd.to_pickle({
@@ -222,4 +233,4 @@ def run(
 
 if __name__ == '__main__':
     for config in params:
-        run(config, output_logits=True, output_prompts=False)
+        run(config, output_logits=False, output_prompts=True)
