@@ -53,13 +53,9 @@ RESPONSE_FORMAT = {
 
 EXAMPLE = {
     'tjh': {
-        'batches': 'prompts/tjh/N-1_batches_example.txt',
-        'list': 'prompts/tjh/N-1_list_example.txt',
-        'string': 'prompts/tjh/N-1_string_example.txt',
+        'string': 'prompts/tjh/string_example.txt',
     },
     'mimic-iv': {
-        'batches': 'prompts/mimic-iv/N-1_batches_example.txt',
-        'list': 'prompts/mimic-iv/N-1_list_example.txt',
-        'string': 'prompts/mimic-iv/N-1_string_example.txt',
+        'string': 'prompts/mimic-iv/string_example.txt',
     },
 }

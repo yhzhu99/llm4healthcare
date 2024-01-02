@@ -1,12 +1,9 @@
-Here is one example:
-Input patient information:
-This Patient had 9 visits with the following details:
-- PatientID: "10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1, 10000032_1"
-- RecordTime: "0, 1, 2, 3, 4, 5, 6, 7, 8"
-- AdmissionTime: "2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00, 2180-07-23 14:00:00"
-- DischargeTime: "2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47, 2180-07-23 23:50:47"
-- Sex: "0, 0, 0, 0, 0, 0, 0, 0, 0"
-- Age: "52, 52, 52, 52, 52, 52, 52, 52, 52"
+Here is an example:
+Input information of a patient:
+The patient is a female, aged 52 years.
+The patient had 9 visits that occurred at 0, 1, 2, 3, 4, 5, 6, 7, 8.
+Details of the features for each visit are as follows:
+
 - Capillary refill rate: "nan, nan, nan, nan, nan, nan, nan, nan, nan"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
