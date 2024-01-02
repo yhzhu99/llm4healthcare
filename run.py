@@ -119,9 +119,9 @@ def run(
     task = config['task']
     assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
     
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
-    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
-    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
+    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))[:5]
+    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))[:5]
+    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))[:5]
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
     record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
@@ -129,6 +129,13 @@ def run(
     
     dst_path = os.path.join(dst_root, dataset, task, config['model'])
     Path(dst_path).mkdir(parents=True, exist_ok=True)
+    sub_dst_name = f'{form}_{str(nshot)}shot'
+    if config['unit'] is True:
+        sub_dst_name += '_unit'
+    if config['reference_range'] is True:
+        sub_dst_name += '_range'
+    sub_dst_path = os.path.join(dst_path, sub_dst_name)
+    Path(sub_dst_path).mkdir(parents=True, exist_ok=True)
  
     for x, y, pid, record_time in zip(xs, ys, pids, record_times):
         length = len(x)
@@ -179,16 +186,11 @@ def run(
             pred = 0.501
             # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
             # logging.info(f'UserPrompt:{userPrompt}\nResponse: {result}\n')
-        name = str(round(pid)) + '_' + form + '_' + str(nshot) + 'shot'
-        if config['unit'] is True:
-            name += '_unit'
-        if config['reference_range'] is True:
-            name += '_range'
         pd.to_pickle({
             'prompt': userPrompt,
             'label': label,
             'pred': pred,
-        }, os.path.join(dst_path, f'{name}.pkl'))
+        }, os.path.join(sub_dst_path, f'{round(pid)}.pkl'))
         labels.append(label)
         preds.append(pred)
 
