@@ -1,6 +1,7 @@
 #############################################
 # self defined
 ###############
+logs/
 prompts/test/
 logits/
 performance/
