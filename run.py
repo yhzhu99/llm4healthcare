@@ -179,7 +179,7 @@ def run(
             pred = 0.501
             # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
             # logging.info(f'UserPrompt:{userPrompt}\nResponse: {result}\n')
-        name = str(pid) + '_' + form + '_' + nshot + 'shot'
+        name = str(round(pid)) + '_' + form + '_' + str(nshot) + 'shot'
         if config['unit'] is True:
             name += '_unit'
         if config['reference_range'] is True:
