@@ -1,4 +1,26 @@
-SYSTEMPROMPT = "You are an experienced doctor in the field of COVID-19 treatment."
+SYSTEMPROMPT = 'You are an experienced doctor in the field of COVID-19 treatment.'
+USERPROMPT = '''I will provide you with medical information from multiple Intensive Care Unit (ICU) visits of a patient, each characterized by a fixed number of features.
+
+{INPUT_FORMAT_DESCRIPTION}
+
+{TASK_DESCRIPTION_AND_RESPONSE_FORMAT}
+
+In situations where the data does not allow for a reasonable conclusion, respond with the phrase `I do not know` without any additional explanation.
+
+{UNIT_RANGE_CONTEXT}
+
+{EXAMPLE}
+
+Input information of a patient:
+
+The patient is a {SEX}, aged {AGE} years.
+The patient had {LENGTH} visits that occurred at {RECORD_TIME_LIST}.
+Details of the features for each visit are as follows:
+
+{DETAIL}
+
+RESPONSE:
+'''
 
 UNIT = {
     'tjh': 'prompts/tjh/unit.json',
