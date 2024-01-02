@@ -122,9 +122,9 @@ def run(
     task = config['task']
     assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
     
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))[:5]
-    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))[:5]
-    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))[:5]
+    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))[5:]
+    ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))[5:]
+    pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))[5:]
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
     record_times = pd.read_pickle(os.path.join(dataset_path, 'test_x_record_times.pkl'))
     labels = []
@@ -200,7 +200,7 @@ def run(
                 pred = float(result)
             except:
                 pred = 0.501
-                if result == 'I do not know':
+                if result == 'I do not know.':
                     pass
                 else:
                     logging.info(f'PatientID: {round(pid)}:\nResponse: {result}\n')
