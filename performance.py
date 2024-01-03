@@ -25,10 +25,23 @@ def export_performance(
     data = dict(data, **{k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
     
     performance = pd.DataFrame(data=data, index=['all', 'without unknown samples'])
+    
+    time = config['time']
+    if time == 0:
+        time_des = 'upon-discharge'
+    elif time == 1:
+        time_des = '1month'
+    elif time == 2:
+        time_des = '6months'
     dst_path = os.path.join(dst_root, config['dataset'], config['task'], config['model'])
-    os.makedirs(dst_path, exist_ok=True)
-    performance.to_csv(os.path.join(dst_path, f'{Path(src_path).name}.csv'))
+    sub_dst_name = f'{config["form"]}_{str(config["n_shot"])}shot_{time_des}'
+    if config['unit'] is True:
+        sub_dst_name += '_unit'
+    if config['reference_range'] is True:
+        sub_dst_name += '_range'
+    Path(dst_path).mkdir(parents=True, exist_ok=True)
+    performance.to_csv(os.path.join(dst_path, f'{sub_dst_name}.csv'))
 
 if __name__ == '__main__':
-    export_performance('logits/tjh/outcome/gpt-4-1106-preview/string_0shot.pkl')
-    export_performance('logits/tjh/outcome/gpt-4-1106-preview/string_0shot_unit_range.pkl')
+    export_performance('logits/mimic-iv/outcome/gpt-4-1106-preview/20240103-113726.pkl')
+    export_performance('/data/wangzx/llm4healthcare/logits/mimic-iv/outcome/gpt-4-1106-preview/20240103-115018.pkl')
