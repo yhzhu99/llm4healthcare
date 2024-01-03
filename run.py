@@ -18,20 +18,24 @@ from prompts.prompt import *
 
 logging.basicConfig(filename=f'logs/{dt.now().strftime("%Y%m%d")}.log', level=logging.INFO, format='%(asctime)s\n%(message)s')
 
-# @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
+@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def query_llm(
     model: str,
     systemPrompt: str,
     userPrompt: str,
 ):
     client = OpenAI(api_key=OPENAI_API_KEY)
-    result = client.chat.completions.create(
-        model=model,
-        messages=[
-            {'role': 'system', 'content': systemPrompt},
-            {'role': 'user', 'content': userPrompt},
-        ],
-    )
+    try:
+        result = client.chat.completions.create(
+            model=model,
+            messages=[
+                {'role': 'system', 'content': systemPrompt},
+                {'role': 'user', 'content': userPrompt},
+            ],
+        )
+    except Exception as e:
+        logging.info(f'{e}')
+        raise e
     return result.choices[0].message.content, result.usage.prompt_tokens, result.usage.completion_tokens
 
 def format_input(
@@ -52,8 +56,8 @@ def format_input(
             feature_values[categorical_feature] = []
             for visit in patient:
                 values = [visit[i] for i in indexes]
-                if sum(values) == 0:
-                    pass
+                if 1 not in values:
+                    feature_values[categorical_feature].append('unknown')
                 else:
                     for i in indexes:
                         if visit[i] == 1:
@@ -75,7 +79,7 @@ def format_input(
         for i, visit in enumerate(patient):
             detail += f'Visit {i + 1}:\n'
             for feature in features:
-                value = feature_values[feature][i] if i < len(feature_values[feature]) else 'nan'
+                value = feature_values[feature][i] if i < len(feature_values[feature]) else 'unknown'
                 detail += f'- {feature}: {value}\n'
             detail += '\n'
     return detail
@@ -113,11 +117,15 @@ def run(
     assert form in ['string', 'batches', 'list'], f'Unknown form: {form}'
     
     nshot = config['n_shot']
-    example = ''
-    if nshot > 0:
-        shot = open(EXAMPLE[dataset][form]).read()
-        for _ in range(nshot):
-            example += shot
+    if nshot == 0:
+        example = ''
+    elif nshot == 1:
+        example = f'Here is an example of input information:\n'
+        example += EXAMPLE[dataset][form][0] + '\n'
+    else:
+        example = f'Here are {nshot} examples of input information:\n'
+        for i in range(nshot):
+            example += EXAMPLE[dataset][form][i] + '\n'
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
     task = config['task']
@@ -212,7 +220,7 @@ def run(
                 pred = float(result)
             except:
                 pred = 0.501
-                if result == 'I do not know.':
+                if result == 'I do not know':
                     pass
                 else:
                     logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
@@ -232,5 +240,5 @@ def run(
         }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
 
 if __name__ == '__main__':
-    for config in params:
-        run(config, output_logits=False, output_prompts=True)
+    for config in params[2:3]:
+        run(config, output_logits=True, output_prompts=False)
