@@ -21,7 +21,8 @@ def export_performance(
             labels.append(label)
             preds.append(pred)
     metrics = get_all_metrics(preds, labels, 'outcome', None)
-    data = {k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())}
+    data = {'count': [len(_labels), len(labels)]}
+    data = dict(data, **{k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
     
     performance = pd.DataFrame(data=data, index=['all', 'without unknown samples'])
     dst_path = os.path.join(dst_root, config['dataset'], config['task'], config['model'])
