@@ -219,11 +219,8 @@ def run(
             try:
                 pred = float(result)
             except:
-                pred = 0.501
-                if result == 'I do not know':
-                    pass
-                else:
-                    logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
+                pred = 0.501    
+                logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
             pd.to_pickle({
                 'prompt': userPrompt,
                 'label': label,
@@ -240,5 +237,5 @@ def run(
         }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
 
 if __name__ == '__main__':
-    for config in params[2:3]:
+    for config in params[3:4]:
         run(config, output_logits=True, output_prompts=False)
