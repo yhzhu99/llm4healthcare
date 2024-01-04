@@ -121,10 +121,12 @@ def run(
         example = ''
     elif nshot == 1:
         example = f'Here is an example of input information:\n'
+        example += 'Example #1:'
         example += EXAMPLE[dataset][form][0] + '\n'
     else:
         example = f'Here are {nshot} examples of input information:\n'
         for i in range(nshot):
+            example += f'Example #{i + 1}:'
             example += EXAMPLE[dataset][form][i] + '\n'
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
@@ -168,7 +170,7 @@ def run(
             sub_dst_name += '_range'
         sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
- 
+
     for x, y, pid, record_time in zip(xs, ys, pids, record_times):
         if isinstance(pid, float):
             pid = str(round(pid))
@@ -237,5 +239,5 @@ def run(
         }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
 
 if __name__ == '__main__':
-    for config in params[3:4]:
-        run(config, output_logits=True, output_prompts=False)
+    for config in params[10:16]:
+        run(config, output_logits=False, output_prompts=True)
