@@ -105,20 +105,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
-- Glascow coma scale total: "unknown, unknown, unknown, unknown"
-- Glascow coma scale verbal response: "Confused, Confused, Oriented, Oriented"
-- Diastolic blood pressure: "56.0, 56.0, 58.0, 53.0"
-- Fraction inspired oxygen: "unknown, unknown, unknown, unknown"
-- Glucose: "115.0, 115.0, 115.0, 115.0"
-- Heart Rate: "94.0, 105.0, 97.0, 100.0"
-- Height: "unknown, unknown, unknown, unknown"
-- Mean blood pressure: "64.0, 64.0, 67.0, 60.0"
-- Oxygen saturation: "97.0, 94.0, 95.0, 95.0"
-- Respiratory rate: "23.0, 21.0, 20.0, 21.0"
-- Systolic blood pressure: "88.0, 88.0, 95.0, 86.0"
-- Temperature: "37.05555555555556, 37.05555555555556, 37.5, 37.5"
-- Weight: "39.3264264, 39.3264264, 39.3264264, 39.3264264"
-- pH: "unknown, unknown, unknown, unknown"
+...
 
 RESPONSE:
 0.3
@@ -131,20 +118,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "To speech, To speech, To speech, Spontaneously"
 - Glascow coma scale motor response: "Abnorm extensn, Obeys Commands, No Response, Localizes Pain"
-- Glascow coma scale total: "unknown, unknown, unknown, unknown"
-- Glascow coma scale verbal response: "Confused, Confused, Confused, Confused"
-- Diastolic blood pressure: "324.96, 181.48, 618.15, 318.7"
-- Fraction inspired oxygen: "0.62, 0.65, 0.63, 0.57"
-- Glucose: "6587.53, 13421.45, 4827.29, 5383.21"
-- Heart Rate: "68.21, 79.45, 78.74, 113.09"
-- Height: "156.65, 179.6, 157.08, 162.58"
-- Mean blood pressure: "577.77, 1708.11, 1543.6, 488.92"
-- Oxygen saturation: "2532.85, 1282.89, 1450.5, 3892.13"
-- Respiratory rate: "7.02, 19.59, 22.39, 13.76"
-- Systolic blood pressure: "279.77, 81.43, 3515.27, 3862.95"
-- Temperature: "23.49, 33.02, 46.53, 28.58"
-- Weight: "74.35, 95.29, 92.48, 107.65"
-- pH: "4037.65, 12378.75, 7459.89, 9343.3"
+...
 
 RESPONSE:
 0.9
@@ -157,20 +131,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
-- Glascow coma scale total: "unknown, 15, 13, 12, 11"
-- Glascow coma scale verbal response: "Spontaneously, Inappropriate Words, Confused, Inappropriate Words, Inappropriate Words"
-- Diastolic blood pressure: "250.87, 136.42, 398.25, 20.98, 117.72"
-- Fraction inspired oxygen: "0.5, 0.2, 0.47, 0.44, 1.03"
-- Glucose: "7527.47, 331.66, 2821.62, 2679.17, 7756.74"
-- Heart Rate: "124.23, 18.91, 61.73, 150.03, 187.6"
-- Height: "191.48, 171.01, 169.08, 197.79, 161.34"
-- Mean blood pressure: "648.18, 3700.99, 7252.52, 986.85, 3847.55"
-- Oxygen saturation: "1789.69, 67.02, 599.62, 472.91, 105.99"
-- Respiratory rate: "137.05, 57.86, 281.02, 221.34, 79.01"
-- Systolic blood pressure: "271.48, 237.76, 245.35, 24.73, 57.08"
-- Temperature: "41.01, 34.62, 48.93, 20.55, 41.96"
-- Weight: "4802.09, 3210.31, 3011.51, 2915.57, 1808.56"
-- pH: "9122.89, 8101.48, 1093.88, 24542.72, 11425.86"
+...
 
 RESPONSE:
 0.25
