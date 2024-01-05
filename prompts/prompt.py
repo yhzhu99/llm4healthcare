@@ -11,8 +11,7 @@ In situations where the data does not allow for a reasonable conclusion, respond
 
 {EXAMPLE}
 
-Input information of a patient:
-
+Now please predict the patient below:
 The patient is a {SEX}, aged {AGE} years.
 The patient had {LENGTH} visits that occurred at {RECORD_TIME_LIST}.
 Details of the features for each visit are as follows:
@@ -123,7 +122,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
-...
+......
 
 RESPONSE:
 0.3
@@ -136,7 +135,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "To speech, To speech, To speech, Spontaneously"
 - Glascow coma scale motor response: "Abnorm extensn, Obeys Commands, No Response, Localizes Pain"
-...
+......
 
 RESPONSE:
 0.9
@@ -149,7 +148,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
-...
+......
 
 RESPONSE:
 0.25
@@ -164,7 +163,7 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
-...
+......
 
 RESPONSE:
 0.3
@@ -179,11 +178,75 @@ Details of the features for each visit are as follows:
 - Capillary refill rate: "unknown, unknown, unknown, unknown"
 - Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously"
 - Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
-...
+......
 
 RESPONSE:
 0.3, 0.4
 ''',
         ]
     },
+}
+
+COT = {
+    'tjh': '',
+    'mimic-iv': '''
+Please follow the Chain-of-Thought Analysis Process:
+
+1. Analyze the data step by step, For example:
+   - Blood pressure shows a slight downward trend, indicating...
+   - Heart rate is stable, suggesting...
+   - Lab results indicate [specific condition or lack thereof]...
+   - The patient underwent [specific intervention], which could mean...
+
+2. Make Intermediate Conclusions:
+   - Draw intermediate conclusions from each piece of data. For example:
+     - If a patient's blood pressure is consistently low, it might indicate poor cardiovascular function.
+     - The patient's cardiovascular function is [conclusion].
+     - [Other intermediate conclusions based on data].
+
+3. Aggregate the Findings:
+   - After analyzing each piece of data, aggregate these findings to form a comprehensive view of the patient's condition.
+   - Summarize key points from the initial analysis and intermediate conclusions.
+
+Aggregated Findings:
+- Considering the patient's vital signs and lab results, the overall health status is...
+
+4. Final Assessment:
+   - Conclude with an assessment of the patient's likelihood of not surviving their hospital stay.
+   - Provide a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.
+   - If the data is insufficient or ambiguous, conclude with "I do not know."
+
+[0.XX] or "I do not know."
+
+Here is an example of Input Information and Response:
+Example #1:
+Input information of a patient:
+The patient is a female, aged 52 years.
+The patient had 4 visits that occurred at 0, 1, 2, 3.
+Details of the features for each visit are as follows:
+- Mean blood pressure: "83.42, 79.5, 73.92, 73.0"
+- Heart Rate: "83.56, 82.55, 81.5, 81.75"
+- Respiratory rate: "16.05, 13.9, 16.53, 27.39"
+......
+
+RESPONSE:
+1. Analyze the data step by step:
+   - Blood pressure shows a slight downward trend, which might indicate a gradual decline in cardiovascular stability.
+   - Heart rate is stable, which is a good sign, suggesting no immediate cardiac distress.
+   - The respiratory rate initially is stable, but there is a significant increase in the last reading, which could indicate respiratory distress, possibly due to a lung infection, pulmonary embolism, or other respiratory complications.
+
+2. Make Intermediate Conclusions:
+   - The decreasing blood pressure could be a sign of worsening heart function or infection-related hypotension.
+   - Stable heart rate is reassuring but does not completely rule out underlying issues.
+   - The sudden increase in respiratory rate is concerning, indicating potential acute respiratory problems.
+
+3. Aggregate the Findings:
+   - The patient is possibly facing a cardiovascular challenge, compounded by an infection and electrolyte imbalance.
+
+Aggregated Findings:
+- Combining the trends in blood pressure, heart rate, and respiratory rate, it appears that the patient's condition is deteriorating, particularly in terms of cardiovascular and respiratory function.
+
+4. Final Assessment:
+0.75
+'''
 }
