@@ -51,6 +51,7 @@ RESPONSE_FORMAT = {
     'los': 'Please respond with a sequence of integers with each one indicating the number of days expected in the ICU during their current visit. Do not include any additional explanation.',
     'readmission': 'Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of readmission. Do not include any additional explanation.',
     'multitask': 'Please respond with 2 floating-point numbers between 0 and 1, the first one is the likelihood of death and the second one is the likelihood of readmission, where a higher number suggests a greater likelihood of death or readmission. Do not include any additional explanation.',
+    'cot': 'Please follow the Chain-of-Thought Analysis Process and respond with a floating-point number between 0 and 1 or `I do not know` at last.'
 }
 
 EXAMPLE = {
