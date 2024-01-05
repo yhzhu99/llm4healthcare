@@ -138,6 +138,12 @@ def run(
         for i in range(nshot):
             example += f'Example #{i + 1}:'
             example += EXAMPLE[dataset][task][i] + '\n'
+            
+    if config['prompt_engineering'] is True:
+        example = COT[dataset]
+        response_format = RESPONSE_FORMAT['cot']
+    else:
+        response_format = RESPONSE_FORMAT[task]
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
     xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
@@ -156,6 +162,8 @@ def run(
             sub_dst_name += '_unit'
         if config['reference_range'] is True:
             sub_dst_name += '_range'
+        if config['prompt_engineering'] is True:
+            sub_dst_name += '_cot'
         sub_logits_path = os.path.join(logits_path, sub_dst_name)
         Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
     if output_prompts:
@@ -166,6 +174,8 @@ def run(
             sub_dst_name += '_unit'
         if config['reference_range'] is True:
             sub_dst_name += '_range'
+        if config['prompt_engineering'] is True:
+            sub_dst_name += '_cot'
         sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
 
@@ -192,7 +202,7 @@ def run(
             LENGTH=length,
             RECORD_TIME_LIST=', '.join(list(map(str, record_time))),
             DETAIL=detail,
-            RESPONSE_FORMAT=RESPONSE_FORMAT[task],
+            RESPONSE_FORMAT=response_format,
         )
         if output_prompts:
             with open(os.path.join(sub_prompts_path, f'{pid}.txt'), 'w') as f:
@@ -221,7 +231,9 @@ def run(
             else:
                 raise ValueError(f'Unknown task: {task}')
             try:
-                if task in ['los', 'multitask']:
+                if config['prompt_engineering'] is True:
+                    pred = result
+                elif task in ['los', 'multitask']:
                     pred = [float(p) for p in result.split(',')]
                 else:
                     pred = float(result)
