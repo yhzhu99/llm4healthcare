@@ -41,19 +41,19 @@ INPUT_FORMAT_DESCRIPTION = {
 
 TASK_DESCRIPTION_AND_RESPONSE_FORMAT = {
     'outcome': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',
-    'los': 'Your task is to Evaluate the provided medical data to estimate the remaining duration of the ICU stay. Consider the progression of health across multiple visits to forecast the length of intensive care needed. Please respond with only an integer indicating the number of days expected in the ICU.',
+    'los': 'Your task is to Evaluate the provided medical data to estimate the remaining duration of the ICU stay. Consider the progression of health across multiple visits to forecast the length of intensive care needed. Please respond with a sequence of integers with each one indicating the number of days expected in the ICU during their current visit.',
     'readmission': 'Your task is to analyze the medical history to predict the probability of readmission within 30 days post-discharge. Include cases where a patient passes away within 30 days from the discharge date. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of readmission.',
 }
 
 RESPONSE_FORMAT = {
     'outcome': 'Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death. Do not include any additional explanation.',
-    'los': 'Please respond with only an integer indicating the number of days expected in the ICU. Do not include any additional explanation.',
+    'los': 'Please respond with a sequence of integers with each one indicating the number of days expected in the ICU during their current visit.. Do not include any additional explanation.',
     'readmission': 'Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of readmission. Do not include any additional explanation.',
 }
 
 EXAMPLE = {
     'tjh': {
-        'string': [
+        'outcome': [
 '''
 Input information of a patient:
 The patient is a male, aged 52.0 years.
@@ -93,10 +93,25 @@ Details of the features for each visit are as follows:
 RESPONSE:
 0.3
 ''',
+        ],
+        'los': [
+'''
+Input information of a patient:
+The patient is a male, aged 52.0 years.
+The patient had 5 visits that occurred at 2020-02-09, 2020-02-10, 2020-02-13, 2020-02-14, 2020-02-17.
+Details of the features for each visit are as follows:
+- Hypersensitive cardiac troponinI: "1.9, 1.9, 1.9, 1.9, 1.9"
+- hemoglobin: "139.0, 139.0, 142.0, 142.0, 142.0"
+- Serum chloride: "103.7, 103.7, 104.2, 104.2, 104.2"
+......
+
+RESPONSE:
+9, 8, 5, 4, 1
+'''
         ]
     },
     'mimic-iv': {
-        'string': [
+        'outcome': [
 '''
 Input information of a patient:
 The patient is a female, aged 52 years.
@@ -136,6 +151,21 @@ Details of the features for each visit are as follows:
 RESPONSE:
 0.25
 ''',
-        ]
+        ],
+        'readmission': [
+'''
+Input information of a patient:
+The patient is a female, aged 52 years.
+The patient had 4 visits that occurred at 0, 1, 2, 3.
+Details of the features for each visit are as follows:
+- Capillary refill rate: "unknown, unknown, unknown, unknown"
+- Glascow coma scale eye opening: "Spontaneously, Spontaneously, Spontaneously, Spontaneously"
+- Glascow coma scale motor response: "Obeys Commands, Obeys Commands, Obeys Commands, Obeys Commands"
+...
+
+RESPONSE:
+0.3
+''',
+        ],
     },
 }
