@@ -99,7 +99,7 @@ def run(
     dataset = config['dataset']
     assert dataset in ['tjh', 'mimic-iv'], f'Unknown dataset: {dataset}'
     task = config['task']
-    assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
+    assert task in ['outcome', 'los', 'readmission', 'multitask'], f'Unknown task: {task}'
     time = config['time']
     if time == 0:
         time_des = 'upon-discharge'
@@ -216,13 +216,22 @@ def run(
                 label = y[0][2]
             elif task == 'los':
                 label = [yi[1] for yi in y]
+            elif task == 'multitask':
+                label = [y[0][0], y[0][2]]
+            else:
+                raise ValueError(f'Unknown task: {task}')
             try:
-                if task == 'los':
+                if task in ['los', 'multitask']:
                     pred = [float(p) for p in result.split(',')]
                 else:
                     pred = float(result)
             except:
-                pred = 0.501    
+                if task == 'los':
+                    pass
+                elif task == 'multitask':
+                    pred = [0.501, 0.501]
+                else:
+                    pred = 0.501
                 logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
             pd.to_pickle({
                 'prompt': userPrompt,
