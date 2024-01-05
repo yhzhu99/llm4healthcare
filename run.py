@@ -93,11 +93,22 @@ def run(
 ):
     logging.info(f'Running config: {config}\n\n')
     
-    dataset = config['dataset']
-    assert dataset in ['tjh', 'mimic-iv'], f'Unknown dataset: {dataset}'
-    
     prompt_tokens = 0
     completion_tokens = 0
+    
+    dataset = config['dataset']
+    assert dataset in ['tjh', 'mimic-iv'], f'Unknown dataset: {dataset}'
+    task = config['task']
+    assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
+    time = config['time']
+    if time == 0:
+        time_des = 'upon-discharge'
+    elif time == 1:
+        time_des = '1month'
+    elif time == 2:
+        time_des = '6months'
+    else:
+        raise ValueError(f'Unknown time: {time}')
     
     if config['unit'] is True or config['reference_range'] is True:
         unit_range = ''
@@ -115,33 +126,20 @@ def run(
         
     form = config['form']
     assert form in ['string', 'batches', 'list'], f'Unknown form: {form}'
-    
     nshot = config['n_shot']
     if nshot == 0:
         example = ''
     elif nshot == 1:
         example = f'Here is an example of input information:\n'
         example += 'Example #1:'
-        example += EXAMPLE[dataset][form][0] + '\n'
+        example += EXAMPLE[dataset][task][0] + '\n'
     else:
         example = f'Here are {nshot} examples of input information:\n'
         for i in range(nshot):
             example += f'Example #{i + 1}:'
-            example += EXAMPLE[dataset][form][i] + '\n'
+            example += EXAMPLE[dataset][task][i] + '\n'
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
-    task = config['task']
-    assert task in ['outcome', 'los', 'readmission'], f'Unknown task: {task}'
-    time = config['time']
-    if time == 0:
-        time_des = 'upon-discharge'
-    elif time == 1:
-        time_des = '1month'
-    elif time == 2:
-        time_des = '6months'
-    else:
-        raise ValueError(f'Unknown time: {time}')
-    
     xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
     ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
     pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
@@ -217,9 +215,12 @@ def run(
             elif task == 'readmission':
                 label = y[0][2]
             elif task == 'los':
-                pass
+                label = [yi[1] for yi in y]
             try:
-                pred = float(result)
+                if task == 'los':
+                    pred = [float(p) for p in result.split(',')]
+                else:
+                    pred = float(result)
             except:
                 pred = 0.501    
                 logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
@@ -236,8 +237,8 @@ def run(
             'config': config,
             'preds': preds,
             'labels': labels,
-        }, os.path.join(logits_path, dt.now().strftime("%Y%m%d-%H%M%S") + '.pkl'))
+        }, os.path.join(logits_path, sub_dst_name + '.pkl'))
 
 if __name__ == '__main__':
-    for config in params[10:16]:
-        run(config, output_logits=False, output_prompts=True)
+    for config in params:
+        run(config, output_logits=True, output_prompts=False)
