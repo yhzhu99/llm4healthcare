@@ -47,7 +47,7 @@ TASK_DESCRIPTION_AND_RESPONSE_FORMAT = {
 
 RESPONSE_FORMAT = {
     'outcome': 'Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death. Do not include any additional explanation.',
-    'los': 'Please respond with a sequence of integers with each one indicating the number of days expected in the ICU during their current visit.. Do not include any additional explanation.',
+    'los': 'Please respond with a sequence of integers with each one indicating the number of days expected in the ICU during their current visit. Do not include any additional explanation.',
     'readmission': 'Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of readmission. Do not include any additional explanation.',
 }
 
