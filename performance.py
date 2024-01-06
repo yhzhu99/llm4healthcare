@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import torch
 
-from metrics import get_all_metrics
+from metrics import get_all_metrics, get_regression_metrics
 
 def export_performance(
     src_path: str,
@@ -29,6 +29,26 @@ def export_performance(
         data = {'count': [len(_labels), len(labels)] * 2}
         data = dict(data, **{k: [v1, v2, v3, v4] for k, v1, v2, v3, v4 in zip(_outcome_metrics.keys(), _outcome_metrics.values(), outcome_metrics.values(), _readmission_metrics.values(), readmission_metrics.values())})
         performance = pd.DataFrame(data=data, index=['o all', 'o without unknown samples', 'r all', 'r without unknown samples'])
+    elif config['task'] == 'los':
+        _labels = logits['labels']
+        _preds = logits['preds']
+        labels = []
+        preds = []
+        for label, pred in zip(_labels, _preds):
+            if pred[0] != 0:
+                labels.append(label)
+                preds.append(pred)
+        _labels = torch.vstack([torch.tensor(label).unsqueeze(1) for label in _labels]).squeeze(-1)
+        _preds = torch.vstack([torch.tensor(pred).unsqueeze(1) for pred in _preds]).squeeze(-1)
+        labels = torch.vstack([torch.tensor(label).unsqueeze(1) for label in labels]).squeeze(-1)
+        preds = torch.vstack([torch.tensor(pred).unsqueeze(1) for pred in preds]).squeeze(-1)
+        print(_labels, labels)
+        _metrics = get_regression_metrics(_preds, _labels)
+        metrics = get_regression_metrics(preds, labels)
+        print(_metrics, metrics)
+        data = {'count': [len(_labels), len(labels)]}
+        data = dict(data, **{k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
+        performance = pd.DataFrame(data=data, index=['all', 'w/o'])
     else:
         _labels = logits['labels']
         _preds = logits['preds']
@@ -65,6 +85,7 @@ def export_performance(
 
 if __name__ == '__main__':
     for file in [
-        'logits/mimic-iv/multitask/gpt-4-1106-preview/string_1shot_upon-discharge_unit_range.pkl'
+        'logits/tjh/los/gpt-3.5-turbo-16k/string_1shot_upon-discharge_unit_range.pkl',
+        'logits/tjh/los/gpt-4-1106-preview/string_1shot_upon-discharge_unit_range.pkl'
     ]:
         export_performance(file)
