@@ -239,7 +239,7 @@ def run(
                     pred = float(result)
             except:
                 if task == 'los':
-                    pass
+                    pred = [0] * len(label)
                 elif task == 'multitask':
                     pred = [0.501, 0.501]
                 else:
