@@ -139,7 +139,7 @@ def run(
             example += f'Example #{i + 1}:'
             example += EXAMPLE[dataset][task][i] + '\n'
             
-    if config['prompt_engineering'] is True:
+    if config.get('prompt_engineering') is True:
         example = COT[dataset]
         response_format = RESPONSE_FORMAT['cot']
     else:
@@ -162,7 +162,7 @@ def run(
             sub_dst_name += '_unit'
         if config['reference_range'] is True:
             sub_dst_name += '_range'
-        if config['prompt_engineering'] is True:
+        if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
         sub_logits_path = os.path.join(logits_path, sub_dst_name)
         Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
@@ -174,7 +174,7 @@ def run(
             sub_dst_name += '_unit'
         if config['reference_range'] is True:
             sub_dst_name += '_range'
-        if config['prompt_engineering'] is True:
+        if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
         sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
@@ -231,7 +231,7 @@ def run(
             else:
                 raise ValueError(f'Unknown task: {task}')
             try:
-                if config['prompt_engineering'] is True:
+                if config.get('prompt_engineering') is True:
                     pred = result
                 elif task in ['los', 'multitask']:
                     pred = [float(p) for p in result.split(',')]
@@ -247,8 +247,8 @@ def run(
                 logging.info(f'PatientID: {pid}:\nResponse: {result}\n')
             pd.to_pickle({
                 'prompt': userPrompt,
-                'label': label,
                 'pred': pred,
+                'label': label,
             }, os.path.join(sub_logits_path, f'{pid}.pkl'))
             labels.append(label)
             preds.append(pred)
