@@ -14,8 +14,8 @@ def get_regression_metrics(preds, labels):
 
     # return a dictionary
     return {
-        "mse": mse.compute(),
-        "rmse": rmse.compute(),
-        "mae": mae.compute(),
-        "r2": r2.compute(),
+        "mse": mse.compute().item(),
+        "rmse": rmse.compute().item(),
+        "mae": mae.compute().item(),
+        "r2": r2.compute().item(),
     }

@@ -18,9 +18,9 @@ def get_all_metrics(preds, labels, task, los_info):
     if task == "outcome":
         return get_binary_metrics(preds, labels)
     elif task == "los":
-        return get_regression_metrics(reverse_los(preds, los_info), reverse_los(labels[:,1], los_info))
+        return get_regression_metrics(reverse_los(preds, los_info), reverse_los(labels[:, 1], los_info))
     elif task == "multitask":
-        return get_binary_metrics(preds[:,0], labels[:,0]) | get_regression_metrics(reverse_los(preds[:,1], los_info), reverse_los(labels[:,1], los_info))
+        return get_binary_metrics(preds[:, 0], labels[:, 0]) | get_regression_metrics(reverse_los(preds[:, 1], los_info), reverse_los(labels[:, 1], los_info))
     else:
         raise ValueError("Task not supported")
     
