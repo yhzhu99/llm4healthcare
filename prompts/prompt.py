@@ -39,10 +39,13 @@ INPUT_FORMAT_DESCRIPTION = {
 }
 
 TASK_DESCRIPTION_AND_RESPONSE_FORMAT = {
-    'outcome': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',
+    'outcome': {
+        'upon-discharge': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',
+        '1month': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of death within 30 days post-discharge. Include cases where a patient does not survive their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',
+        '6months': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of death within 6 months post-discharge. Include cases where a patient does not survive their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',
+    },
     'los': 'Your task is to Evaluate the provided medical data to estimate the remaining duration of the ICU stay. Consider the progression of health across multiple visits to forecast the length of intensive care needed. Please respond with a sequence of integers with each one indicating the number of days expected in the ICU during their current visit.',
     'readmission': 'Your task is to analyze the medical history to predict the probability of readmission within 30 days post-discharge. Include cases where a patient passes away within 30 days from the discharge date. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of readmission.',
-    
     'multitask': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay and predict the probability of readmission within 30 days post-discharge including cases where a patient passes away within 30 days from the discharge date. Please respond with 2 floating-point numbers between 0 and 1, the first one is the likelihood of death and the second one is the likelihood of readmission, where a higher number suggests a greater likelihood of death or readmission. Do not include any additional explanation.'
 }
 

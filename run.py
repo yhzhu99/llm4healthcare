@@ -144,6 +144,11 @@ def run(
         response_format = RESPONSE_FORMAT['cot']
     else:
         response_format = RESPONSE_FORMAT[task]
+        
+    if task == 'outcome':
+        task_description = TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task][time_des]
+    else:
+        task_description = TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task]
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
     xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
@@ -194,7 +199,7 @@ def run(
         )
         userPrompt = USERPROMPT.format(
             INPUT_FORMAT_DESCRIPTION=INPUT_FORMAT_DESCRIPTION[form],
-            TASK_DESCRIPTION_AND_RESPONSE_FORMAT=TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task],
+            TASK_DESCRIPTION_AND_RESPONSE_FORMAT=task_description,
             UNIT_RANGE_CONTEXT=unit_range,
             EXAMPLE=example,
             SEX=sex,
