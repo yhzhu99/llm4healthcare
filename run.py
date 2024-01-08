@@ -11,6 +11,7 @@ from tenacity import (
     wait_random_exponential,
 )
 from openai import OpenAI
+import google.generativeai as genai
 import pandas as pd
 
 from config.config import *
@@ -24,19 +25,29 @@ def query_llm(
     systemPrompt: str,
     userPrompt: str,
 ):
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    try:
-        result = client.chat.completions.create(
-            model=model,
-            messages=[
-                {'role': 'system', 'content': systemPrompt},
-                {'role': 'user', 'content': userPrompt},
-            ],
-        )
-    except Exception as e:
-        logging.info(f'{e}')
-        raise e
-    return result.choices[0].message.content, result.usage.prompt_tokens, result.usage.completion_tokens
+    if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k']:
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        try:
+            result = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {'role': 'system', 'content': systemPrompt},
+                    {'role': 'user', 'content': userPrompt},
+                ],
+            )
+        except Exception as e:
+            logging.info(f'{e}')
+            raise e
+        return result.choices[0].message.content, result.usage.prompt_tokens, result.usage.completion_tokens
+    elif model in ['gemini-pro']:
+        genai.configure(api_key=GOOGLE_API_KEY)
+        model = genai.GenerativeModel(model)
+        try:
+            response = model.generate_content(systemPrompt + userPrompt)
+        except Exception as e:
+            logging.info(f'{e}')
+            raise e
+        return response.text, 0, 0
 
 def format_input(
     patient: List,

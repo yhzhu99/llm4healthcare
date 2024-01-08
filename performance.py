@@ -38,6 +38,7 @@ def export_performance(
             if pred[0] != 0:
                 labels.append(label)
                 preds.append(pred)
+        data = {'count': [len(_labels), len(labels)]}
         _labels = torch.vstack([torch.tensor(label).unsqueeze(1) for label in _labels]).squeeze(-1)
         _preds = torch.vstack([torch.tensor(pred).unsqueeze(1) for pred in _preds]).squeeze(-1)
         labels = torch.vstack([torch.tensor(label).unsqueeze(1) for label in labels]).squeeze(-1)
@@ -46,7 +47,6 @@ def export_performance(
         _metrics = get_regression_metrics(_preds, _labels)
         metrics = get_regression_metrics(preds, labels)
         print(_metrics, metrics)
-        data = {'count': [len(_labels), len(labels)]}
         data = dict(data, **{k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
         performance = pd.DataFrame(data=data, index=['all', 'w/o'])
     else:
