@@ -12,6 +12,9 @@ from tenacity import (
 )
 from openai import OpenAI
 import google.generativeai as genai
+from langchain.callbacks.manager import CallbackManager
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.llms import Ollama
 import pandas as pd
 
 from config.config import *
@@ -22,13 +25,13 @@ logging.basicConfig(filename=f'logs/{dt.now().strftime("%Y%m%d")}.log', level=lo
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def query_llm(
     model: str,
+    llm,
     systemPrompt: str,
     userPrompt: str,
 ):
     if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k']:
-        client = OpenAI(api_key=OPENAI_API_KEY)
         try:
-            result = client.chat.completions.create(
+            result = llm.chat.completions.create(
                 model=model,
                 messages=[
                     {'role': 'system', 'content': systemPrompt},
@@ -40,14 +43,19 @@ def query_llm(
             raise e
         return result.choices[0].message.content, result.usage.prompt_tokens, result.usage.completion_tokens
     elif model in ['gemini-pro']:
-        genai.configure(api_key=GOOGLE_API_KEY)
-        model = genai.GenerativeModel(model)
         try:
-            response = model.generate_content(systemPrompt + userPrompt)
+            response = llm.generate_content(systemPrompt + userPrompt)
         except Exception as e:
             logging.info(f'{e}')
             raise e
         return response.text, 0, 0
+    elif model in ['llama2:70b']:
+        try:
+            response = llm(systemPrompt + userPrompt)
+        except Exception as e:
+            logging.info(f'{e}')
+            raise e
+        return response, 0, 0
 
 def format_input(
     patient: List,
@@ -161,6 +169,17 @@ def run(
     else:
         task_description = TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task]
     
+    model = config['model']
+    if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k']:
+        llm = OpenAI(api_key=OPENAI_API_KEY)
+    elif model in ['gemini-pro']:
+        genai.configure(api_key=GOOGLE_API_KEY, transport='rest')
+        llm = genai.GenerativeModel(model)
+    elif model in ['llama2:70b']:
+        llm = Ollama(model=model)
+    else:
+        raise ValueError(f'Unknown model: {model}')
+    
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
     xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
     ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
@@ -171,7 +190,7 @@ def run(
     preds = []
     
     if output_logits:
-        logits_path = os.path.join(logits_root, dataset, task, config['model'])
+        logits_path = os.path.join(logits_root, dataset, task, model)
         Path(logits_path).mkdir(parents=True, exist_ok=True)
         sub_dst_name = f'{form}_{str(nshot)}shot_{time_des}'
         if config['unit'] is True:
@@ -183,7 +202,7 @@ def run(
         sub_logits_path = os.path.join(logits_path, sub_dst_name)
         Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
     if output_prompts:
-        prompts_path = os.path.join(prompts_root, dataset, task, config['model'])
+        prompts_path = os.path.join(prompts_root, dataset, task, model)
         Path(prompts_path).mkdir(parents=True, exist_ok=True)
         sub_dst_name = f'{form}_{str(nshot)}shot_{time_des}'
         if config['unit'] is True:
@@ -226,13 +245,14 @@ def run(
         if output_logits:
             try:
                 result, prompt_token, completion_token = query_llm(
-                    model=config['model'],
-                    systemPrompt=SYSTEMPROMPT,
+                    model=model,
+                    llm=llm,
+                    systemPrompt=SYSTEMPROMPT[dataset],
                     userPrompt=userPrompt
                 )
             except Exception as e:
                 # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-                logging.info(f'{e}')
+                logging.info(f'Exception: {e}')
                 continue
             prompt_tokens += prompt_token
             completion_tokens += completion_token
