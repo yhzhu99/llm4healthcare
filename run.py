@@ -50,7 +50,12 @@ def query_llm(
             raise e
         return response.text, 0, 0
     elif model in ['llama2:70b']:
-        response = llm(systemPrompt + userPrompt)
+        try:
+            response = llm(systemPrompt + userPrompt)
+        except Exception as e:
+            logging.info(f'{e}')
+            raise e
+        return response, 0, 0
 
 def format_input(
     patient: List,
@@ -242,12 +247,12 @@ def run(
                 result, prompt_token, completion_token = query_llm(
                     model=model,
                     llm=llm,
-                    systemPrompt=SYSTEMPROMPT[task],
+                    systemPrompt=SYSTEMPROMPT[dataset],
                     userPrompt=userPrompt
                 )
             except Exception as e:
                 # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-                logging.info(f'{e}')
+                logging.info(f'Exception: {e}')
                 continue
             prompt_tokens += prompt_token
             completion_tokens += completion_token
