@@ -1,6 +1,7 @@
 #############################################
 # self defined
 ###############
+figs/
 logs/
 prompts/test/
 logits/
@@ -16,6 +17,7 @@ demo.ipynb
 debug.py
 debug.ipynb
 prompt.txt
+*.ipynb
 #############################################
 
 # Byte-compiled / optimized / DLL files

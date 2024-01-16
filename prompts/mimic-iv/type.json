@@ -1,0 +1,19 @@
+{
+    "Capillary refill rate": -1,
+    "Glascow coma scale eye opening": -1,
+    "Glascow coma scale motor response": -1,
+    "Glascow coma scale total": -1,
+    "Glascow coma scale verbal response": -1,
+    "Diastolic blood pressure": 1,
+    "Fraction inspired oxygen": 0,
+    "Glucose": 0,
+    "Heart Rate": 0,
+    "Height": 1,
+    "Mean blood pressure": 1,
+    "Oxygen saturation": 0,
+    "Respiratory rate": 1,
+    "Systolic blood pressure": 1,
+    "Temperature": 0,
+    "Weight": 1,
+    "pH": 1
+}

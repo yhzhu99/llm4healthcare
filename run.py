@@ -173,7 +173,7 @@ def run(
     if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k']:
         llm = OpenAI(api_key=OPENAI_API_KEY)
     elif model in ['gemini-pro']:
-        genai.configure(api_key=GOOGLE_API_KEY)
+        genai.configure(api_key=GOOGLE_API_KEY, transport='rest')
         llm = genai.GenerativeModel(model)
     elif model in ['llama2:70b']:
         llm = Ollama(model=model)
@@ -181,7 +181,10 @@ def run(
         raise ValueError(f'Unknown model: {model}')
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    if config['impute'] is True:
+        xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    else:
+        xs = pd.read_pickle(os.path.join(dataset_path, 'test_x_no_impute.pkl'))
     ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
     pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
@@ -199,6 +202,8 @@ def run(
             sub_dst_name += '_range'
         if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
+        if config['impute'] is False:
+            sub_dst_name += '_no_impute'
         sub_logits_path = os.path.join(logits_path, sub_dst_name)
         Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
     if output_prompts:
@@ -211,6 +216,8 @@ def run(
             sub_dst_name += '_range'
         if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
+        if config['impute'] is False:
+            sub_dst_name += '_no_impute'
         sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
 
@@ -252,7 +259,7 @@ def run(
                 )
             except Exception as e:
                 # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-                logging.info(f'Exception: {e}')
+                logging.info(f'Query LLM Exception: {e}')
                 continue
             prompt_tokens += prompt_token
             completion_tokens += completion_token
