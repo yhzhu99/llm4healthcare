@@ -45,7 +45,7 @@ def export_performance(
         preds = torch.vstack([torch.tensor(pred).unsqueeze(1) for pred in preds]).squeeze(-1)
         _metrics = get_regression_metrics(_preds, _labels)
         metrics = get_regression_metrics(preds, labels)
-        data = dict(data, **{k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
+        data = dict(data, **{k: [f'{v1:.2f}', f'{v2:.2f}'] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
         performance = pd.DataFrame(data=data, index=['all', 'w/o'])
     else:
         _labels = logits['labels']
@@ -59,11 +59,11 @@ def export_performance(
                 preds.append(pred)
         metrics = get_all_metrics(preds, labels, 'outcome', None)
         data = {'count': [len(_labels), len(labels)]}
-        data = dict(data, **{k: [v1, v2] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
+        data = dict(data, **{k: [f'{v1 * 100:.2f}', f'{v2 * 100:.2f}'] for k, v1, v2 in zip(_metrics.keys(), _metrics.values(), metrics.values())})
     
         performance = pd.DataFrame(data=data, index=['all', 'without unknown samples'])
     
-    time = config['time']
+    time = config.get('time', 0)
     if time == 0:
         time_des = 'upon-discharge'
     elif time == 1:
@@ -78,12 +78,13 @@ def export_performance(
         sub_dst_name += '_range'
     if config.get('prompt_engineering') is True:
         sub_dst_name += '_cot'
+    if config.get('impute') is False:
+        sub_dst_name += '_no_impute'
     Path(dst_path).mkdir(parents=True, exist_ok=True)
     performance.to_csv(os.path.join(dst_path, f'{sub_dst_name}.csv'))
 
 if __name__ == '__main__':
     for file in [
-        'logits/tjh/los/gpt-3.5-turbo-16k/string_1shot_upon-discharge_unit_range.pkl',
-        'logits/tjh/los/gpt-4-1106-preview/string_1shot_upon-discharge_unit_range.pkl'
+        'logits/tjh/outcome/gpt-4-1106-preview/string_0shot_upon-discharge_no_impute.pkl'
     ]:
         export_performance(file)
