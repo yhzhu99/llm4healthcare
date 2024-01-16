@@ -181,7 +181,10 @@ def run(
         raise ValueError(f'Unknown model: {model}')
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
-    xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    if config['impute'] is True:
+        xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
+    else:
+        xs = pd.read_pickle(os.path.join(dataset_path, 'test_x_no_impute.pkl'))
     ys = pd.read_pickle(os.path.join(dataset_path, 'test_y.pkl'))
     pids = pd.read_pickle(os.path.join(dataset_path, 'test_pid.pkl'))
     features = pd.read_pickle(os.path.join(dataset_path, 'all_features.pkl'))[2:]
@@ -199,6 +202,8 @@ def run(
             sub_dst_name += '_range'
         if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
+        if config['impute'] is False:
+            sub_dst_name += '_no_impute'
         sub_logits_path = os.path.join(logits_path, sub_dst_name)
         Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
     if output_prompts:
@@ -211,6 +216,8 @@ def run(
             sub_dst_name += '_range'
         if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
+        if config['impute'] is False:
+            sub_dst_name += '_no_impute'
         sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
 
