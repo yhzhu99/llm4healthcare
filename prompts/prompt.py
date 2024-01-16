@@ -41,6 +41,8 @@ INPUT_FORMAT_DESCRIPTION = {
     'batches': 'Organize visit data of a patient into separate batches, each batch corresponding to one visit.',
 }
 
+MISSING_VALUE_DESCRIPTION = ' Missing values are represented as `nan`.'
+
 TASK_DESCRIPTION_AND_RESPONSE_FORMAT = {
     'outcome': {
         'upon-discharge': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',

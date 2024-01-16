@@ -234,8 +234,11 @@ def run(
             form=form,
             features=features,
         )
+        input_format_description = INPUT_FORMAT_DESCRIPTION[form]
+        if config['impute'] is False:
+            input_format_description += MISSING_VALUE_DESCRIPTION
         userPrompt = USERPROMPT.format(
-            INPUT_FORMAT_DESCRIPTION=INPUT_FORMAT_DESCRIPTION[form],
+            INPUT_FORMAT_DESCRIPTION=input_format_description,
             TASK_DESCRIPTION_AND_RESPONSE_FORMAT=task_description,
             UNIT_RANGE_CONTEXT=unit_range,
             EXAMPLE=example,
