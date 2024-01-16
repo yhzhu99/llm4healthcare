@@ -252,7 +252,7 @@ def run(
                 )
             except Exception as e:
                 # logging.info(f'PatientID: {patient.iloc[0]["PatientID"]}:\n')
-                logging.info(f'Exception: {e}')
+                logging.info(f'Query LLM Exception: {e}')
                 continue
             prompt_tokens += prompt_token
             completion_tokens += completion_token

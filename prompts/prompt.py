@@ -1,4 +1,7 @@
-SYSTEMPROMPT = 'You are an experienced doctor in the field of COVID-19 treatment.'
+SYSTEMPROMPT = {
+    'tjh': 'You are an experienced doctor in the field of COVID-19 treatment.',
+    'mimic-iv': 'You are an experienced doctor in Intensive Care Unit (ICU) treatment.',
+}
 USERPROMPT = '''I will provide you with medical information from multiple Intensive Care Unit (ICU) visits of a patient, each characterized by a fixed number of features.
 
 {INPUT_FORMAT_DESCRIPTION}
