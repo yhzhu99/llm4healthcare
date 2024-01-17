@@ -43,6 +43,8 @@ INPUT_FORMAT_DESCRIPTION = {
 
 MISSING_VALUE_DESCRIPTION = ' Missing values are represented as `nan`.'
 
+INSTRUCTING_MISSING_VALUE = 'Values followed by `**` are initially not a number and imputed through Last Observation Carried Forward(LOCF) method. If a large number of values of a certain feature are filled, you need to consider that the credibility of the analysis results for that feature is relatively low.'
+
 TASK_DESCRIPTION_AND_RESPONSE_FORMAT = {
     'outcome': {
         'upon-discharge': 'Your task is to assess the provided medical data and analyze the health records from ICU visits to determine the likelihood of the patient not surviving their hospital stay. Please respond with only a floating-point number between 0 and 1, where a higher number suggests a greater likelihood of death.',

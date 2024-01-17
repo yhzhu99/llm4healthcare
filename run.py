@@ -29,7 +29,7 @@ def query_llm(
     systemPrompt: str,
     userPrompt: str,
 ):
-    if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k']:
+    if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-1106']:
         try:
             result = llm.chat.completions.create(
                 model=model,
@@ -170,7 +170,7 @@ def run(
         task_description = TASK_DESCRIPTION_AND_RESPONSE_FORMAT[task]
     
     model = config['model']
-    if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k']:
+    if model in ['gpt-4-1106-preview', 'gpt-3.5-turbo', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-1106']:
         llm = OpenAI(api_key=OPENAI_API_KEY)
     elif model in ['gemini-pro']:
         genai.configure(api_key=GOOGLE_API_KEY, transport='rest')
@@ -181,7 +181,8 @@ def run(
         raise ValueError(f'Unknown model: {model}')
     
     dataset_path = f'datasets/{dataset}/processed/fold_llm'
-    if config['impute'] is True:
+    impute = config.get('impute', 1)
+    if impute in [1, 2]:
         xs = pd.read_pickle(os.path.join(dataset_path, 'test_x.pkl'))
     else:
         xs = pd.read_pickle(os.path.join(dataset_path, 'test_x_no_impute.pkl'))
@@ -202,8 +203,12 @@ def run(
             sub_dst_name += '_range'
         if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
-        if config['impute'] is False:
+        if impute == 0:
             sub_dst_name += '_no_impute'
+        elif impute == 1:
+            sub_dst_name += '_impute'
+        elif impute == 2:
+            sub_dst_name += '_impute_info'
         sub_logits_path = os.path.join(logits_path, sub_dst_name)
         Path(sub_logits_path).mkdir(parents=True, exist_ok=True)
     if output_prompts:
@@ -216,8 +221,12 @@ def run(
             sub_dst_name += '_range'
         if config.get('prompt_engineering') is True:
             sub_dst_name += '_cot'
-        if config['impute'] is False:
+        if impute == 0:
             sub_dst_name += '_no_impute'
+        elif impute == 1:
+            sub_dst_name += '_impute'
+        elif impute == 2:
+            sub_dst_name += '_impute_info'
         sub_prompts_path = os.path.join(prompts_path, sub_dst_name)
         Path(sub_prompts_path).mkdir(parents=True, exist_ok=True)
 
@@ -235,8 +244,10 @@ def run(
             features=features,
         )
         input_format_description = INPUT_FORMAT_DESCRIPTION[form]
-        if config['impute'] is False:
+        if impute == 0:
             input_format_description += MISSING_VALUE_DESCRIPTION
+        elif impute == 2:
+            input_format_description += INSTRUCTING_MISSING_VALUE
         userPrompt = USERPROMPT.format(
             INPUT_FORMAT_DESCRIPTION=input_format_description,
             TASK_DESCRIPTION_AND_RESPONSE_FORMAT=task_description,

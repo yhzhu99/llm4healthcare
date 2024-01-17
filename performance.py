@@ -78,13 +78,19 @@ def export_performance(
         sub_dst_name += '_range'
     if config.get('prompt_engineering') is True:
         sub_dst_name += '_cot'
-    if config.get('impute') is False:
+    impute = config.get('impute')
+    if impute == 0:
         sub_dst_name += '_no_impute'
+    elif impute == 1:
+        sub_dst_name += '_impute'
+    elif impute == 2:
+        sub_dst_name += '_impute_info'
     Path(dst_path).mkdir(parents=True, exist_ok=True)
     performance.to_csv(os.path.join(dst_path, f'{sub_dst_name}.csv'))
 
 if __name__ == '__main__':
     for file in [
-        'logits/tjh/outcome/gpt-4-1106-preview/string_0shot_upon-discharge_no_impute.pkl'
+        'logits/tjh/outcome/gpt-3.5-turbo-1106/string_1shot_upon-discharge_unit_range_impute.pkl',
+        'logits/tjh/outcome/gpt-3.5-turbo-1106/string_1shot_upon-discharge_unit_range_no_impute.pkl'
     ]:
         export_performance(file)
