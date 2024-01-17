@@ -54,6 +54,7 @@ def forward_fill_pipeline(
     all_y = []
     all_pid = []
     all_record_times = []  # List to store record times for each patient
+    all_missing_masks = []
     
 
     for name, group in grouped:
@@ -61,6 +62,7 @@ def forward_fill_pipeline(
         patient_x = []
         patient_y = []
         patient_record_times = []  # List to store record times for the current patient
+        patient_missing_masks = pd.isna(sorted_group[labtest_features]).values.astype(int).tolist()
 
         for f in require_impute_features:
             # if the f is not in the default_fill, then default to -1
@@ -86,7 +88,8 @@ def forward_fill_pipeline(
         all_y.append(patient_y)
         all_pid.append(name)
         all_record_times.append(patient_record_times)
-    return all_x, all_y, all_pid, all_record_times
+        all_missing_masks.append(patient_missing_masks)
+    return all_x, all_y, all_pid, all_record_times, all_missing_masks
 
 
 # outlier processing
